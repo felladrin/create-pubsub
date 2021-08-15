@@ -1,0 +1,57 @@
+{
+  "name": "create-pubsub",
+  "version": "1.0.0",
+  "description": "A tiny (~200B) and strongly-typed function for creating a PubSub (Event Emitter/Listener).",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "type": "module",
+  "source": "./src/create-pubsub.js",
+  "types": "./dist/create-pubsub.d.ts",
+  "exports": "./dist/create-pubsub.modern.js",
+  "main": "./dist/create-pubsub.cjs",
+  "module": "./dist/create-pubsub.module.js",
+  "unpkg": "./dist/create-pubsub.umd.js",
+  "scripts": {
+    "build": "microbundle src/create-pubsub.ts --name create-pubsub",
+    "dev": "microbundle watch src/create-pubsub.ts --name create-pubsub",
+    "prepare": "npm run build",
+    "preview-package-contents": "package-check && npm pack --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felladrin/create-pubsub.git"
+  },
+  "keywords": [
+    "event",
+    "events",
+    "dispatcher",
+    "signal",
+    "emitter",
+    "strongly",
+    "typed",
+    "typescript",
+    "pubsub",
+    "pub/sub",
+    "tiny",
+    "eventemitter",
+    "listener",
+    "subscribe",
+    "unsubscribe"
+  ],
+  "author": {
+    "name": "Victor Nogueira",
+    "email": "victor@victornogueira.app",
+    "url": "https://victornogueira.app"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/felladrin/create-pubsub/issues"
+  },
+  "homepage": "https://github.com/felladrin/create-pubsub#readme",
+  "devDependencies": {
+    "@skypack/package-check": "^0.2.2",
+    "microbundle": "^0.13.3"
+  }
+}
