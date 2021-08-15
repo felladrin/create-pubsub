@@ -16,16 +16,7 @@ function subscribe<T>(
   handlers: SubscriptionHandler<T>[],
   handler: SubscriptionHandler<T>
 ): UnsubscribeFunction {
-  let isNewHandler = true;
-
-  for (index = handlers.length - 1; index >= 0; index--)
-    if (handlers[index] === handler) {
-      isNewHandler = false;
-      break;
-    }
-
-  if (isNewHandler) handlers.unshift(handler);
-
+  handlers.unshift(handler);
   return () => {
     for (index = handlers.length - 1; index >= 0; index--)
       if (handlers[index] === handler) handlers.splice(index, 1);
