@@ -16,6 +16,7 @@
   "scripts": {
     "build": "microbundle src/create-pubsub.ts --name create-pubsub",
     "dev": "microbundle watch src/create-pubsub.ts --name create-pubsub",
+    "test": "npm run build && uvu test",
     "prepare": "npm run build",
     "preview-package-contents": "package-check && npm pack --dry-run"
   },
@@ -52,6 +53,7 @@
   "homepage": "https://github.com/felladrin/create-pubsub#readme",
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
-    "microbundle": "^0.13.3"
+    "microbundle": "^0.13.3",
+    "uvu": "^0.5.1"
   }
 }
