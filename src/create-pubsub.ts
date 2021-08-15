@@ -10,21 +10,20 @@ export type SubscribeFunction<T> = (
   handler: SubscriptionHandler<T>
 ) => UnsubscribeFunction;
 
-let index = 0;
-
 function subscribe<T>(
   handlers: SubscriptionHandler<T>[],
   handler: SubscriptionHandler<T>
 ): UnsubscribeFunction {
   handlers.unshift(handler);
   return () => {
-    for (index = handlers.length - 1; index >= 0; index--)
+    for (let index = handlers.length - 1; index >= 0; index--)
       if (handlers[index] === handler) handlers.splice(index, 1);
   };
 }
 
 function publish<T>(handlers: SubscriptionHandler<T>[], data: T) {
-  for (index = handlers.length - 1; index >= 0; index--) handlers[index](data);
+  for (let index = handlers.length - 1; index >= 0; index--)
+    handlers[index](data);
 }
 
 export function createPubSub<T = void>(): [
