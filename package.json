@@ -1,24 +1,23 @@
 {
   "name": "create-pubsub",
   "version": "1.0.2",
-  "description": "A tiny (~200B) and strongly-typed function for creating a PubSub (Event Emitter/Listener).",
+  "description": "A tiny (140B) and strongly-typed function for creating a PubSub (Event Emitter/Listener).",
   "files": [
     "dist",
     "src"
   ],
-  "type": "module",
-  "source": "./src/create-pubsub.js",
+  "source": "./src/create-pubsub.ts",
   "types": "./dist/create-pubsub.d.ts",
   "exports": "./dist/create-pubsub.modern.js",
-  "main": "./dist/create-pubsub.cjs",
+  "main": "./dist/create-pubsub.js",
   "module": "./dist/create-pubsub.module.js",
   "unpkg": "./dist/create-pubsub.umd.js",
   "scripts": {
-    "build": "microbundle src/create-pubsub.ts --name create-pubsub",
-    "dev": "microbundle watch src/create-pubsub.ts --name create-pubsub",
-    "test": "npm run build && uvu test",
-    "prepare": "npm run build",
-    "preview-package-contents": "package-check && npm pack --dry-run"
+    "build": "microbundle src/create-pubsub.ts --name create-pubsub --sourcemap false",
+    "dev": "microbundle watch src/create-pubsub.ts --name create-pubsub --no-compress",
+    "test": "uvu -r ts-node/register test",
+    "prepare": "package-check && del dist && npm run build",
+    "preview-package-contents": "npm pack --dry-run"
   },
   "repository": {
     "type": "git",
@@ -53,7 +52,9 @@
   "homepage": "https://github.com/felladrin/create-pubsub#readme",
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
+    "del-cli": "^4.0.1",
     "microbundle": "^0.13.3",
+    "ts-node": "^10.2.0",
     "uvu": "^0.5.1"
   }
 }
