@@ -1,7 +1,7 @@
 # Create PubSub
 
 [![NPM Version](https://img.shields.io/npm/v/create-pubsub.svg?style=flat)](https://www.npmjs.org/package/create-pubsub)
-[![Size](https://img.shields.io/bundlephobia/minzip/create-pubsub)](https://bundlephobia.com/result?p=create-pubsub)
+[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub/dist/create-pubsub.js?compression=gzip)](https:/unpkg.com/create-pubsub/dist/create-pubsub.js)
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.npmjs.org/package/create-pubsub)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 

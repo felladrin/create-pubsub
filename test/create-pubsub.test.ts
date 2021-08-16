@@ -1,23 +1,23 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { createPubSub } from "../dist/create-pubsub.cjs";
+import { createPubSub } from "../src/create-pubsub";
 
 test("random number should be transmitted accordingly", () => {
   const randomNumber = Math.random();
-  const [pub, sub] = createPubSub();
+  const [pub, sub] = createPubSub<number>();
   sub((data) => assert.is(data, randomNumber));
   pub(randomNumber);
 });
 
 test("destructuring the array created by createPubSub() show allow any function name to be used", () => {
   const randomNumber = Math.random();
-  const [publishRandomNumber, subscribeToRandomNumber] = createPubSub();
+  const [publishRandomNumber, subscribeToRandomNumber] = createPubSub<number>();
   subscribeToRandomNumber((data) => assert.is(data, randomNumber));
   publishRandomNumber(randomNumber);
 });
 
 test("synchronous subscriptions should be dispatched in sequence", () => {
-  const subscriptionHandlersIds = [];
+  const subscriptionHandlersIds = [] as number[];
   const firstSubscriptionHandler = () => subscriptionHandlersIds.push(1);
   const secondSubscriptionHandler = () => subscriptionHandlersIds.push(2);
   const thirdSubscriptionHandler = () => subscriptionHandlersIds.push(3);
@@ -31,7 +31,7 @@ test("synchronous subscriptions should be dispatched in sequence", () => {
 
 test("subscribing only once should work properly", () => {
   let timesTheSubscriptionHandlerWasInvoked = 0;
-  const [publish, subscribe] = createPubSub();
+  const [publish, subscribe] = createPubSub<number>();
   const unsubscribe = subscribe(() => {
     timesTheSubscriptionHandlerWasInvoked++;
     unsubscribe();
@@ -46,7 +46,7 @@ test("subscribing only once should work properly even when other subscription ha
   let timesTheFirstSubscriptionHandlerWasInvoked = 0;
   let timesTheSecondSubscriptionHandlerWasInvoked = 0;
   let timesTheThirdSubscriptionHandlerWasInvoked = 0;
-  const [publish, subscribe] = createPubSub();
+  const [publish, subscribe] = createPubSub<number>();
   const unsubscribeFirstSubscriptionHandler = subscribe(() => {
     timesTheFirstSubscriptionHandlerWasInvoked++;
     unsubscribeFirstSubscriptionHandler();
@@ -70,11 +70,11 @@ test("subscribing only once should work properly even when other subscription ha
 test("subscribing the same function twice and unsubscribing it once should keep one subscription active", () => {
   let totalTimesInvoked = 0;
   let lastNumberReceived = 0;
-  const functionToTest = (receivedNumber) => {
+  const functionToTest = (receivedNumber: number) => {
     totalTimesInvoked++;
     lastNumberReceived = receivedNumber;
   };
-  const [publish, subscribe] = createPubSub();
+  const [publish, subscribe] = createPubSub<number>();
   const unsubscribeFirstSubscriptionHandler = subscribe(functionToTest);
   subscribe(functionToTest);
   publish(1);
