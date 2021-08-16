@@ -10,32 +10,34 @@ export type SubscribeFunction<T> = (
   handler: SubscriptionHandler<T>
 ) => UnsubscribeFunction;
 
-function subscribe<T>(
-  handlers: SubscriptionHandler<T>[],
-  handler: SubscriptionHandler<T>
-): UnsubscribeFunction {
-  handlers.unshift(handler);
-  return () => {
-    for (let index = handlers.length - 1; index >= 0; index--)
-      if (handlers[index] === handler) {
-        handlers.splice(index, 1);
-        break;
-      }
-  };
-}
-
-function publish<T>(handlers: SubscriptionHandler<T>[], data: T) {
-  for (let index = handlers.length - 1; index >= 0; index--)
-    handlers[index](data);
-}
+type SubscriptionListNode<T> = [
+  handler: SubscriptionHandler<T>,
+  previousItem: SubscriptionListNode<T>,
+  nextItem?: SubscriptionListNode<T>
+];
 
 export function createPubSub<T = void>(): [
   publish: PublishFunction<T>,
   subscribe: SubscribeFunction<T>
 ] {
-  const handlers: SubscriptionHandler<T>[] = [];
+  const head = [] as unknown as SubscriptionListNode<T>;
   return [
-    (data) => publish(handlers, data),
-    (handler) => subscribe(handlers, handler),
+    (data: T) => {
+      let node = head;
+      while (node[2]) {
+        node = node[2];
+        node[0](data);
+      }
+    },
+    (handler) => {
+      let node: 0 | SubscriptionListNode<T> = head;
+      while (node[2]) node = node[2];
+      node = node[2] = [handler, node];
+      return () => {
+        if (!node) return;
+        node[1][2] = node[2];
+        node = 0;
+      };
+    },
   ];
 }
