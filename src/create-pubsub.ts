@@ -1,21 +1,3 @@
-export type SubscriptionHandler<T = void> = T extends void
-  ? () => void
-  : (data: T) => void;
-
-export type PublishFunction<T> = (data: T) => void;
-
-export type UnsubscribeFunction = () => void;
-
-export type SubscribeFunction<T> = (
-  handler: SubscriptionHandler<T>
-) => UnsubscribeFunction;
-
-type SubscriptionListNode<T> = [
-  handler: SubscriptionHandler<T>,
-  previousItem: SubscriptionListNode<T>,
-  nextItem?: SubscriptionListNode<T>
-];
-
 export function createPubSub<T = void>(): [
   publish: PublishFunction<T>,
   subscribe: SubscribeFunction<T>
@@ -41,3 +23,23 @@ export function createPubSub<T = void>(): [
     },
   ];
 }
+
+// #region Types
+export type SubscriptionHandler<T = void> = T extends void
+  ? () => void
+  : (data: T) => void;
+
+export type PublishFunction<T> = (data: T) => void;
+
+export type UnsubscribeFunction = () => void;
+
+export type SubscribeFunction<T> = (
+  handler: SubscriptionHandler<T>
+) => UnsubscribeFunction;
+
+type SubscriptionListNode<T> = [
+  handler: SubscriptionHandler<T>,
+  previousItem: SubscriptionListNode<T>,
+  nextItem?: SubscriptionListNode<T>
+];
+// #endregion
