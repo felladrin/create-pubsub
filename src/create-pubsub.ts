@@ -17,7 +17,10 @@ function subscribe<T>(
   handlers.unshift(handler);
   return () => {
     for (let index = handlers.length - 1; index >= 0; index--)
-      if (handlers[index] === handler) handlers.splice(index, 1);
+      if (handlers[index] === handler) {
+        handlers.splice(index, 1);
+        break;
+      }
   };
 }
 

@@ -67,4 +67,23 @@ test("subscribing only once should work properly even when other subscription ha
   assert.equal(timesTheThirdSubscriptionHandlerWasInvoked, 2);
 });
 
+test("subscribing the same function twice and unsubscribing it once should keep one subscription active", () => {
+  let totalTimesInvoked = 0;
+  let lastNumberReceived = 0;
+  const functionToTest = (receivedNumber) => {
+    totalTimesInvoked++;
+    lastNumberReceived = receivedNumber;
+  };
+  const [publish, subscribe] = createPubSub();
+  const unsubscribeFirstSubscriptionHandler = subscribe(functionToTest);
+  subscribe(functionToTest);
+  publish(1);
+  publish(2);
+  unsubscribeFirstSubscriptionHandler();
+  publish(3);
+  publish(4);
+  assert.equal(totalTimesInvoked, 6);
+  assert.equal(lastNumberReceived, 4);
+});
+
 test.run();
