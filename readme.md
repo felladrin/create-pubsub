@@ -1,7 +1,7 @@
 # Create PubSub
 
 [![NPM Version](https://img.shields.io/npm/v/create-pubsub.svg?style=flat)](https://www.npmjs.org/package/create-pubsub)
-[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub/dist/create-pubsub.js?compression=gzip)](https:/unpkg.com/create-pubsub/dist/create-pubsub.js)
+[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub@latest/dist/create-pubsub.js?compression=gzip)](https://unpkg.com/create-pubsub/dist/create-pubsub.js)
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.npmjs.org/package/create-pubsub)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 
@@ -39,6 +39,14 @@ import { createPubSub } from "https://esm.sh/create-pubsub";
 ```
 
 ## Usage
+
+For each event you want to track, create a new PubSub.
+
+```ts
+const [pub, sub] = createPubSub<Type>();
+```
+
+## Examples
 
 ```ts
 const [pub, sub] = createPubSub<string>();
@@ -84,4 +92,22 @@ const unsubscribe = subscribe((numberReceived) => {
 publish(1); // Will print 1.
 publish(2); // Will print 2 and unsubscribe.
 publish(3); // Nothing will be printed.
+```
+
+And here's an example of chained events:
+
+```ts
+const [emitAssetsLoaded, onAssetsLoaded] = createPubSub();
+const [emitGameStarted, onGameStarted] = createPubSub();
+
+onGameStarted(() => {
+  // Setup world, characters, etc. Then chain more events.
+});
+
+onAssetsLoaded(() => {
+  // Initialize the game, load last saved session, etc.
+  emitGameStarted();
+});
+
+emitAssetsLoaded();
 ```
