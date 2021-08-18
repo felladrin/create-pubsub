@@ -3,8 +3,7 @@
   "version": "1.1.1",
   "description": "A tiny (140B) and strongly-typed function for creating a PubSub (Event Emitter/Listener).",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "source": "./src/create-pubsub.ts",
   "types": "./dist/create-pubsub.d.ts",
