@@ -1,6 +1,9 @@
-export function createPubSub<T = void>(): [
+export function createPubSub<T = void>(
+  storedData?: T
+): [
   publish: PublishFunction<T>,
-  subscribe: SubscribeFunction<T>
+  subscribe: SubscribeFunction<T>,
+  getStoredData: () => T
 ] {
   /**
    * Node on the head of the list, which has no value,
@@ -8,22 +11,17 @@ export function createPubSub<T = void>(): [
    */
   const head = [] as unknown as SubscriptionListNode<T>;
 
-  /**
-   * Data being published, which is stored for later to compare
-   * if it changed in the middle of a publishing process.
-   */
-  let dataBeingPublished: T;
-
   return [
     (data: T) => {
-      // Store the data being published in this loop.
-      dataBeingPublished = data;
-
       /**
        * Variable holding the reference of the current node.
        * Always initialized with the node from the head of the list.
        */
       let node = head;
+
+      // Store the data being published in this loop, to compare
+      // if it changed in the middle of the publishing process.
+      storedData = data;
 
       // While there is a next node...
       while (node[2]) {
@@ -35,7 +33,7 @@ export function createPubSub<T = void>(): [
 
         // If reaction from the node ended up publishing a new data,
         // which happened in a nested loop, we can break this one.
-        if (data !== dataBeingPublished) break;
+        if (data !== storedData) break;
       }
     },
     (handler) => {
@@ -65,6 +63,7 @@ export function createPubSub<T = void>(): [
         node = 0;
       };
     },
+    () => storedData as T,
   ];
 }
 

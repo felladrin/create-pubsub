@@ -115,7 +115,7 @@ test("subscribing the same function twice and unsubscribing it once should keep 
   assert.equal(lastNumberReceived, 4);
 });
 
-test("should stop publishing the old value if a reaction during the publish process ends up publishing a new value", () => {
+test("it should stop publishing the old value if a reaction during the publish process ends up publishing a new value", () => {
   const numbersReceivedOnFirstSubscription: number[] = [];
   const numbersReceivedOnSecondSubscription: number[] = [];
   const numbersReceivedOnThirdSubscription: number[] = [];
@@ -145,6 +145,30 @@ test("should stop publishing the old value if a reaction during the publish proc
   assert.equal(numbersReceivedOnFirstSubscription, [1, 2, 5, 3, 4]);
   assert.equal(numbersReceivedOnSecondSubscription, [1, 2, 5, 3, 4]);
   assert.equal(numbersReceivedOnThirdSubscription, [1, 5, 3, 4]);
+});
+
+test("it should also work as a store", () => {
+  const [dispatchNumberAdded, listenToNumberAdded] = createPubSub<number>();
+
+  const [setCurrentNumber, onCurrentNumberChanged, getCurrentNumber] =
+    createPubSub(1);
+
+  const [setDoubledNumber, , getDoubledNumber] = createPubSub(
+    getCurrentNumber()
+  );
+
+  onCurrentNumberChanged((number) => {
+    setDoubledNumber(number * 2);
+  });
+
+  listenToNumberAdded((numberAdded) =>
+    setCurrentNumber(getCurrentNumber() + numberAdded)
+  );
+
+  dispatchNumberAdded(5);
+
+  assert.equal(getCurrentNumber(), 6);
+  assert.equal(getDoubledNumber(), 12);
 });
 
 test.run();
