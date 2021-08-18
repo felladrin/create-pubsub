@@ -1,6 +1,6 @@
 {
   "name": "create-pubsub",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A tiny (140B) and strongly-typed function for creating a PubSub (Event Emitter/Listener).",
   "files": [
     "dist"
