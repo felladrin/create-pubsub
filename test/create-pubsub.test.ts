@@ -86,4 +86,30 @@ test("subscribing the same function twice and unsubscribing it once should keep 
   assert.equal(lastNumberReceived, 4);
 });
 
+test("should stop publishing the old value if a reaction during the publish process ends up publishing a new value", () => {
+  const numbersReceivedOnFirstSubscription: number[] = [];
+  const numbersReceivedOnSecondSubscription: number[] = [];
+  const numbersReceivedOnThirdSubscription: number[] = [];
+  const [publish, subscribe] = createPubSub<number>();
+  subscribe((numberReceived) => {
+    numbersReceivedOnFirstSubscription.push(numberReceived);
+  });
+  subscribe((numberReceived) => {
+    numbersReceivedOnSecondSubscription.push(numberReceived);
+    if (numberReceived === 2) {
+      publish(5);
+    }
+  });
+  subscribe((numberReceived) => {
+    numbersReceivedOnThirdSubscription.push(numberReceived);
+  });
+  publish(1);
+  publish(2);
+  publish(3);
+  publish(4);
+  assert.equal(numbersReceivedOnFirstSubscription, [1, 2, 5, 3, 4]);
+  assert.equal(numbersReceivedOnSecondSubscription, [1, 2, 5, 3, 4]);
+  assert.equal(numbersReceivedOnThirdSubscription, [1, 5, 3, 4]);
+});
+
 test.run();
