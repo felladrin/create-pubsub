@@ -1,5 +1,5 @@
 import { test } from "uvu";
-import * as assert from "uvu/assert";
+import assert from "uvu/assert";
 import { createPubSub } from "../src/create-pubsub";
 
 test("random number should be transmitted accordingly", () => {
