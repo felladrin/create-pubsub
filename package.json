@@ -1,6 +1,6 @@
 {
   "name": "create-pubsub",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A tiny (162 bytes) strongly-typed Emitter/Listener which is also a Store.",
   "files": [
     "dist"
