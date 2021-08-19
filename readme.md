@@ -5,7 +5,7 @@
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.npmjs.org/package/create-pubsub)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 
-A tiny and strongly-typed function for creating a PubSub (Event Emitter/Listener).
+A tiny and strongly-typed Emitter/Listener which is also a Store.
 
 ## Install
 
@@ -40,10 +40,20 @@ import { createPubSub } from "https://esm.sh/create-pubsub";
 
 ## Usage
 
+### As Emitter/Listener
+
 For each event you want to track, create a new PubSub.
 
 ```ts
 const [pub, sub] = createPubSub<Type>();
+```
+
+### As Store
+
+To store a value, pass an initial value and set a third element while destructuring it.
+
+```ts
+const [pub, sub, get] = createPubSub(initialValue);
 ```
 
 ## Examples
@@ -53,7 +63,7 @@ const [pub, sub] = createPubSub<string>();
 
 sub((data) => console.log(`Hello ${data}!`));
 
-pub("World"); // Will print 'Hello World!'
+pub("World"); // Prints "Hello World!".
 ```
 
 Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names. The following snipped shows different ways to name an event which represents the game ready:
@@ -89,9 +99,9 @@ const unsubscribe = subscribe((numberReceived) => {
   if (numberReceived === 2) unsubscribe();
 });
 
-publish(1); // Will print 1.
-publish(2); // Will print 2 and unsubscribe.
-publish(3); // Nothing will be printed.
+publish(1); // Prints 1.
+publish(2); // Prints 2 and unsubscribe.
+publish(3); // Nothing is printed.
 ```
 
 And here's an example of chained events:
@@ -101,13 +111,47 @@ const [emitAssetsLoaded, onAssetsLoaded] = createPubSub();
 const [emitGameStarted, onGameStarted] = createPubSub();
 
 onGameStarted(() => {
-  // Setup world, characters, etc. Then chain more events.
+  // Setup world, characters, etc. And possibly chain more events.
 });
 
 onAssetsLoaded(() => {
-  // Initialize the game, load last saved session, etc.
+  // Initializes the game, load last saved session, etc.
   emitGameStarted();
 });
 
 emitAssetsLoaded();
+```
+
+Basic store example:
+
+```ts
+const [set, sub, get] = createPubSub("JavaScript");
+
+console.log(get()); // Prints "JavaScript".
+
+set("CoffeeScript"); // Sets the store to "CoffeeScript", but nothing is printed.
+
+sub((state) => console.log(state)); // Subscribe to the next store updates.
+
+set("TypeScript"); // Sets the store to "TypeScript" and prints it.
+```
+
+Using it as a store and reacting to other events:
+
+```ts
+const [set, sub, get] = createPubSub(0);
+
+const [dispatchIncremented, onIncremented] = createPubSub();
+
+const [dispatchDecremented, onDecremented] = createPubSub();
+
+onIncremented(() => set(get() + 1));
+
+onDecremented(() => set(get() - 1));
+
+sub((state) => console.log(state));
+
+dispatchIncremented(); // Prints 1.
+dispatchIncremented(); // Prints 2.
+dispatchDecremented(); // Prints 1.
 ```
