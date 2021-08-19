@@ -1,3 +1,15 @@
+export function createPubSub<T = void>(): [
+  publish: PublishFunction<T>,
+  subscribe: SubscribeFunction<T>,
+  getStoredData: () => T extends void ? undefined : T | undefined
+];
+export function createPubSub<T>(
+  storedData: T
+): [
+  publish: PublishFunction<T>,
+  subscribe: SubscribeFunction<T>,
+  getStoredData: () => T
+];
 export function createPubSub<T = void>(
   storedData?: T
 ): [
@@ -12,7 +24,7 @@ export function createPubSub<T = void>(
   const head = [] as unknown as SubscriptionListNode<T>;
 
   return [
-    (data: T) => {
+    ((data: T) => {
       /**
        * Variable holding the reference of the current node.
        * Always initialized with the node from the head of the list.
@@ -35,7 +47,7 @@ export function createPubSub<T = void>(
         // which happened in a nested loop, we can break this one.
         if (data !== storedData) break;
       }
-    },
+    }) as PublishFunction<T>,
     (handler) => {
       /**
        * Variable holding the reference of the current node.
@@ -67,22 +79,26 @@ export function createPubSub<T = void>(
   ];
 }
 
-// #region Types
-export type SubscriptionHandler<T = void> = T extends void
-  ? () => void
-  : (data: T) => void;
+//#region Public Types
+export type SubscriptionHandler<T = void> = FunctionWithOneOptionalParameter<T>;
 
-export type PublishFunction<T> = (data: T) => void;
+export type PublishFunction<T = void> = FunctionWithOneOptionalParameter<T>;
 
 export type UnsubscribeFunction = () => void;
 
 export type SubscribeFunction<T> = (
   handler: SubscriptionHandler<T>
 ) => UnsubscribeFunction;
+//#endregion
 
+//#region Private Types
 type SubscriptionListNode<T> = [
   handler: SubscriptionHandler<T>,
   previousNode: SubscriptionListNode<T>,
   nextNode?: SubscriptionListNode<T>
 ];
-// #endregion
+
+type FunctionWithOneOptionalParameter<T = void> = T extends void
+  ? () => void
+  : (data: T) => void;
+//#endregion
