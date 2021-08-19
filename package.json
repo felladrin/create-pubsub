@@ -1,7 +1,7 @@
 {
   "name": "create-pubsub",
   "version": "1.2.0",
-  "description": "A tiny (162 bytes) and strongly-typed functional PubSub (Emitter/Listener) which can also be used as a Store.",
+  "description": "A tiny (162 bytes) strongly-typed Emitter/Listener which is also a Store.",
   "files": [
     "dist"
   ],
@@ -37,7 +37,9 @@
     "eventemitter",
     "listener",
     "subscribe",
-    "unsubscribe"
+    "unsubscribe",
+    "store",
+    "state"
   ],
   "author": {
     "name": "Victor Nogueira",
