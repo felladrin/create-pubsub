@@ -80,9 +80,9 @@ export function createPubSub<T = void>(
 }
 
 //#region Public Types
-export type SubscriptionHandler<T = void> = FunctionWithOneOptionalParameter<T>;
+export type SubscriptionHandler<T = void> = (data: T) => void;
 
-export type PublishFunction<T = void> = FunctionWithOneOptionalParameter<T>;
+export type PublishFunction<T = void> = (data: T) => void;
 
 export type UnsubscribeFunction = () => void;
 
@@ -97,8 +97,4 @@ type SubscriptionListNode<T> = [
   previousNode: SubscriptionListNode<T>,
   nextNode?: SubscriptionListNode<T>
 ];
-
-type FunctionWithOneOptionalParameter<T = void> = T extends void
-  ? () => void
-  : (data: T) => void;
 //#endregion
