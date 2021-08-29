@@ -24,16 +24,22 @@ export function createPubSub<T = void>(
   const head = [] as unknown as SubscriptionListNode<T>;
 
   return [
-    ((data: T) => {
+    (data: T) => {
+      /**
+       * Constant holding the value of stored data before it's
+       * updated, to publish it along with the new data.
+       */
+      const previousData = storedData as T;
+
+      // Store the data being published in this loop, to compare
+      // if it changed in the middle of the publishing process.
+      storedData = data;
+
       /**
        * Variable holding the reference of the current node.
        * Always initialized with the node from the head of the list.
        */
       let node = head;
-
-      // Store the data being published in this loop, to compare
-      // if it changed in the middle of the publishing process.
-      storedData = data;
 
       // While there is a next node...
       while (node[2]) {
@@ -41,19 +47,18 @@ export function createPubSub<T = void>(
         node = node[2];
 
         // Publish the data received to the node.
-        node[0](data);
+        node[0](data, previousData);
 
-        // If reaction from the node ended up publishing a new data,
-        // which happened in a nested loop, we can break this one.
+        // If a reaction from that node ended up publishing a new data,
+        // which happened in a another loop, we can break this one.
         if (data !== storedData) break;
       }
-    }) as PublishFunction<T>,
+    },
     (handler) => {
       /**
        * Variable holding the reference of the current node.
        * Always initialized with the node from the head of the list.
-       * Will be set to 0 after subscription ends,
-       * to prevent unsubscribing more then once.
+       * Will be set to 0 after subscription ends, to prevent unsubscribing more then once.
        */
       let node: 0 | SubscriptionListNode<T> = head;
 
@@ -80,7 +85,7 @@ export function createPubSub<T = void>(
 }
 
 //#region Public Types
-export type SubscriptionHandler<T = void> = (data: T) => void;
+export type SubscriptionHandler<T = void> = (data: T, previousData: T) => void;
 
 export type PublishFunction<T = void> = (data: T) => void;
 

@@ -171,4 +171,62 @@ test("it should also work as a store", () => {
   assert.equal(getDoubledNumber(), 12);
 });
 
+test("the previous stored data is also dispatched, to allow comparison with current one", () => {
+  const numbersReceived: number[] = [];
+  const nonSequentiallyEqualNumbersReceived: number[] = [];
+
+  const [publishNumber, onNumberReceived] = createPubSub(0);
+
+  onNumberReceived((numberReceived, previousNumberReceived) => {
+    numbersReceived.push(numberReceived);
+
+    if (numberReceived !== previousNumberReceived) {
+      nonSequentiallyEqualNumbersReceived.push(numberReceived);
+    }
+  });
+
+  publishNumber(1);
+  publishNumber(2);
+  publishNumber(2);
+  publishNumber(3);
+  publishNumber(3);
+  publishNumber(3);
+  publishNumber(4);
+  publishNumber(3);
+  publishNumber(4);
+  publishNumber(4);
+  publishNumber(5);
+
+  assert.equal(numbersReceived, [1, 2, 2, 3, 3, 3, 4, 3, 4, 4, 5]);
+  assert.equal(nonSequentiallyEqualNumbersReceived, [1, 2, 3, 4, 3, 4, 5]);
+});
+
+test("previous stored data also works fine for non-primitive objects", () => {
+  const propertiesChanged: string[] = [];
+  const propertiesUnchanged: string[] = [];
+
+  const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
+    name: "Player1",
+    level: 5,
+    life: 33,
+    mana: 92,
+  });
+
+  onPlayerChanged((playerState, previousPlayerState) => {
+    (Object.keys(playerState) as (keyof typeof playerState)[]).forEach(
+      (property) => {
+        (playerState[property] === previousPlayerState[property]
+          ? propertiesUnchanged
+          : propertiesChanged
+        ).push(property);
+      }
+    );
+  });
+
+  updatePlayer({ ...getPlayer(), level: 6, life: 40 });
+
+  assert.equal(propertiesChanged, ["level", "life"]);
+  assert.equal(propertiesUnchanged, ["name", "mana"]);
+});
+
 test.run();

@@ -66,7 +66,7 @@ sub((data) => console.log(`Hello ${data}!`));
 pub("World"); // Prints "Hello World!".
 ```
 
-Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names. The following snipped shows different ways to name an event which represents the game ready:
+Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names. The following snippet shows different ways to name an event which represents the game ready:
 
 ```ts
 const [publishGameStarted, subscribeToGameStarted] = createPubSub();
@@ -76,7 +76,7 @@ const [gameStarted, onGameStarted] = createPubSub();
 const [dispatchGameStarted, listenGameStartedEvent] = createPubSub();
 ```
 
-You can also publish events with no data:
+You can also publish events with no data, just for signalling:
 
 ```ts
 const [emitPageIsReady, whenPageIsReady] = createPubSub();
@@ -122,18 +122,18 @@ onAssetsLoaded(() => {
 emitAssetsLoaded();
 ```
 
-Basic store example:
+To use it as a store, it's also easy:
 
 ```ts
-const [set, sub, get] = createPubSub("JavaScript");
+const [set, sub, get] = createPubSub("red");
 
-console.log(get()); // Prints "JavaScript".
+console.log(get()); // Prints "red".
 
-set("CoffeeScript"); // Sets the store to "CoffeeScript", but nothing is printed.
+set("blue"); // Sets the store to "blue", but nothing is printed.
 
 sub((state) => console.log(state)); // Subscribe to the next store updates.
 
-set("TypeScript"); // Sets the store to "TypeScript" and prints it.
+set("green"); // Sets the store to "green" and prints it.
 ```
 
 Using it as a store and reacting to other events:
@@ -154,4 +154,24 @@ sub((state) => console.log(state));
 dispatchIncremented(); // Prints 1.
 dispatchIncremented(); // Prints 2.
 dispatchDecremented(); // Prints 1.
+```
+
+You also receive the value to the previous value stored there, so you can
+check if the value has changed or not since last time it was set, for example:
+
+```ts
+const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
+  name: "Player1",
+  level: 5,
+  life: 33,
+  mana: 92,
+});
+
+onPlayerChanged((playerState, previousPlayerState) => {
+  if (playerState.level > previousPlayerState.level) {
+    // Player leveled up! Let's display the level-up dialog.
+  }
+});
+
+updatePlayer({ ...getPlayer(), level: 6, life: 40 });
 ```
