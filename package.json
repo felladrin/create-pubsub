@@ -7,7 +7,13 @@
   ],
   "source": "./src/create-pubsub.ts",
   "types": "./dist/create-pubsub.d.ts",
-  "exports": "./dist/create-pubsub.modern.js",
+  "exports": {
+    "browser": "./dist/create-pubsub.module.js",
+    "umd": "./dist/create-pubsub.umd.js",
+    "import": "./dist/create-pubsub.modern.js",
+    "require": "./dist/create-pubsub.js",
+    "default": "./dist/create-pubsub.module.js"
+  },
   "main": "./dist/create-pubsub.js",
   "module": "./dist/create-pubsub.module.js",
   "unpkg": "./dist/create-pubsub.umd.js",
