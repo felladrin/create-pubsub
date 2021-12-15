@@ -60,8 +60,8 @@
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
     "del-cli": "^4.0.1",
-    "microbundle": "^0.13.3",
-    "ts-node": "^10.2.1",
-    "uvu": "^0.5.1"
+    "microbundle": "^0.14.2",
+    "ts-node": "^10.4.0",
+    "uvu": "^0.5.2"
   }
 }
