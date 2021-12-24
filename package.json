@@ -58,10 +58,10 @@
   },
   "homepage": "https://github.com/felladrin/create-pubsub#readme",
   "devDependencies": {
-    "@skypack/package-check": "^0.2.2",
-    "del-cli": "^4.0.1",
-    "microbundle": "^0.14.2",
-    "ts-node": "^10.4.0",
-    "uvu": "^0.5.2"
+    "@skypack/package-check": "0.2.2",
+    "del-cli": "4.0.1",
+    "microbundle": "0.14.2",
+    "ts-node": "10.4.0",
+    "uvu": "0.5.2"
   }
 }
