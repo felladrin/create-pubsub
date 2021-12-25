@@ -1,8 +1,9 @@
 # Create PubSub
 
 [![NPM Version](https://img.shields.io/npm/v/create-pubsub.svg?style=flat)](https://www.npmjs.org/package/create-pubsub)
-[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub@latest/dist/create-pubsub.js?compression=gzip)](https://unpkg.com/create-pubsub/dist/create-pubsub.js)
-[![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.npmjs.org/package/create-pubsub)
+[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub@latest/dist/create-pubsub.js?compression=gzip)](https://runpkg.com/create-pubsub/dist/create-pubsub.js)
+[![Known Vulnerabilities](https://snyk.io/test/npm/create-pubsub/badge.svg)](https://snyk.io/test/npm/create-pubsub)
+[![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.jsdocs.io/package/create-pubsub#package-index)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 
 A tiny and strongly-typed Emitter/Listener which is also a Store.
@@ -66,7 +67,8 @@ sub((data) => console.log(`Hello ${data}!`));
 pub("World"); // Prints "Hello World!".
 ```
 
-Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names. The following snippet shows different ways to name an event which represents the game ready:
+Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names.  
+The following snippet shows different ways to name an event which represents the game ready:
 
 ```ts
 const [publishGameStarted, subscribeToGameStarted] = createPubSub();
@@ -163,7 +165,7 @@ check if the value has changed or not since last time it was set, for example:
 const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
   name: "Player1",
   level: 5,
-  life: 33,
+  health: 33,
   mana: 92,
 });
 
@@ -173,5 +175,5 @@ onPlayerChanged((playerState, previousPlayerState) => {
   }
 });
 
-updatePlayer({ ...getPlayer(), level: 6, life: 40 });
+updatePlayer({ ...getPlayer(), level: 6, health: 40 });
 ```
