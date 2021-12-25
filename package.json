@@ -17,6 +17,7 @@
   "main": "./dist/create-pubsub.js",
   "module": "./dist/create-pubsub.module.js",
   "unpkg": "./dist/create-pubsub.umd.js",
+  "sideEffects": false,
   "scripts": {
     "build": "microbundle src/create-pubsub.ts --name create-pubsub --sourcemap false",
     "dev": "microbundle watch src/create-pubsub.ts --name create-pubsub --no-compress",
