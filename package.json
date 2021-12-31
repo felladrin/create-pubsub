@@ -39,12 +39,7 @@
     "event-emitter",
     "subscribe",
     "state",
-    "state-management",
-    "pubsub",
-    "pub-sub",
-    "pub/sub",
-    "publish/subscribe",
-    "publish-subscribe"
+    "state-management"
   ],
   "author": {
     "name": "Victor Nogueira",
