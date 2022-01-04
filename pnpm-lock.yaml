@@ -5,14 +5,14 @@ specifiers:
   del-cli: 4.0.1
   microbundle: 0.14.2
   ts-node: 10.4.0
-  uvu: 0.5.2
+  uvu: 0.5.3
 
 devDependencies:
   '@skypack/package-check': 0.2.2
   del-cli: 4.0.1
   microbundle: 0.14.2_ts-node@10.4.0
   ts-node: 10.4.0
-  uvu: 0.5.2
+  uvu: 0.5.3
 
 packages:
 
@@ -3883,11 +3883,6 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /totalist/2.0.0:
-    resolution: {integrity: sha512-+Y17F0YzxfACxTyjfhnJQEe7afPA0GSpYlFkl2VFMxYP7jshQf9gXV7cH47EfToBumFThfKBvfAcoUn6fdNeRQ==}
-    engines: {node: '>=6'}
-    dev: true
-
   /trim-newlines/4.0.2:
     resolution: {integrity: sha512-GJtWyq9InR/2HRiLZgpIKv+ufIKrVrvjQWEj7PxAXNc5dwbNJkqhAUoAGgzRmULAnoOM5EIpveYd3J2VeSAIew==}
     engines: {node: '>=12'}
@@ -3981,8 +3976,8 @@ packages:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
     dev: true
 
-  /uvu/0.5.2:
-    resolution: {integrity: sha512-m2hLe7I2eROhh+tm3WE5cTo/Cv3WQA7Oc9f7JB6uWv+/zVKvfAm53bMyOoGOSZeQ7Ov2Fu9pLhFr7p07bnT20w==}
+  /uvu/0.5.3:
+    resolution: {integrity: sha512-brFwqA3FXzilmtnIyJ+CxdkInkY/i4ErvP7uV0DnUVxQcQ55reuHphorpF+tZoVHK2MniZ/VJzI7zJQoc9T9Yw==}
     engines: {node: '>=8'}
     hasBin: true
     dependencies:
@@ -3990,7 +3985,6 @@ packages:
       diff: 5.0.0
       kleur: 4.1.4
       sade: 1.7.4
-      totalist: 2.0.0
     dev: true
 
   /validate-npm-package-license/3.0.4:
