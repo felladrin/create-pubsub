@@ -1,6 +1,6 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
-import { createPubSub } from "../src/create-pubsub";
+import { createPubSub } from "../src/main";
 
 test("random number should be transmitted accordingly", () => {
   const randomNumber = Math.random();

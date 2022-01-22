@@ -1,12 +1,12 @@
 # Create PubSub
 
 [![NPM Version](https://img.shields.io/npm/v/create-pubsub.svg?style=flat)](https://www.npmjs.org/package/create-pubsub)
-[![Size](https://img.badgesize.io/https:/unpkg.com/create-pubsub@latest/dist/create-pubsub.js?compression=gzip)](https://runpkg.com/create-pubsub/dist/create-pubsub.js)
+[![Size](https://img.shields.io/bundlephobia/minzip/create-pubsub)](https://bundlephobia.com/package/create-pubsub)
 [![Known Vulnerabilities](https://snyk.io/test/npm/create-pubsub/badge.svg)](https://snyk.io/test/npm/create-pubsub)
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.jsdocs.io/package/create-pubsub#package-index)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 
-A tiny and strongly-typed Emitter/Listener which is also a Store.
+A tiny Event Emitter and Observable Store.
 
 ## Install
 
@@ -59,6 +59,8 @@ const [pub, sub, get] = createPubSub(initialValue);
 
 ## Examples
 
+### Example: Getting Started
+
 ```ts
 const [pub, sub] = createPubSub<string>();
 
@@ -67,8 +69,11 @@ sub((data) => console.log(`Hello ${data}!`));
 pub("World"); // Prints "Hello World!".
 ```
 
-Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying on strings representing the events names.  
-The following snippet shows different ways to name an event which represents the game ready:
+### Example: Naming Functions
+
+Name the 'pub' and 'sub' functions as you wish. The idea is to avoid relying
+on strings representing the events names. The following snippet shows
+different ways to name an event which indicates the game started:
 
 ```ts
 const [publishGameStarted, subscribeToGameStarted] = createPubSub();
@@ -77,6 +82,8 @@ const [gameStarted, onGameStarted] = createPubSub();
 
 const [dispatchGameStarted, listenGameStartedEvent] = createPubSub();
 ```
+
+### Example: Signalling
 
 You can also publish events with no data, just for signalling:
 
@@ -89,6 +96,8 @@ whenPageIsReady(() => {
 
 emitPageIsReady();
 ```
+
+### Example: Unsubscribing
 
 And you can unsubscribe at any moment, by invoking the function returned when you subscribe:
 
@@ -106,7 +115,7 @@ publish(2); // Prints 2 and unsubscribe.
 publish(3); // Nothing is printed.
 ```
 
-And here's an example of chained events:
+### Example: Chaining Events
 
 ```ts
 const [emitAssetsLoaded, onAssetsLoaded] = createPubSub();
@@ -124,7 +133,7 @@ onAssetsLoaded(() => {
 emitAssetsLoaded();
 ```
 
-To use it as a store, it's also easy:
+### Example: Storing Data
 
 ```ts
 const [set, sub, get] = createPubSub("red");
@@ -138,25 +147,7 @@ sub((state) => console.log(state)); // Subscribe to the next store updates.
 set("green"); // Sets the store to "green" and prints it.
 ```
 
-Using it as a store and reacting to other events:
-
-```ts
-const [set, sub, get] = createPubSub(0);
-
-const [dispatchIncremented, onIncremented] = createPubSub();
-
-const [dispatchDecremented, onDecremented] = createPubSub();
-
-onIncremented(() => set(get() + 1));
-
-onDecremented(() => set(get() - 1));
-
-sub((state) => console.log(state));
-
-dispatchIncremented(); // Prints 1.
-dispatchIncremented(); // Prints 2.
-dispatchDecremented(); // Prints 1.
-```
+### Example: Action & Reaction
 
 You also receive the value to the previous value stored there, so you can
 check if the value has changed or not since last time it was set, for example:
@@ -176,4 +167,45 @@ onPlayerChanged((playerState, previousPlayerState) => {
 });
 
 updatePlayer({ ...getPlayer(), level: 6, health: 40 });
+```
+
+### Example: State Management
+
+Using it as a store and reacting to other events:
+
+```ts
+const [setValue, watchValue, getValue] = createPubSub(0);
+
+const [dispatchIncremented, onIncremented] = createPubSub();
+
+const [dispatchDecremented, onDecremented] = createPubSub();
+
+onIncremented(() => setValue(getValue() + 1));
+
+onDecremented(() => setValue(getValue() - 1));
+
+watchValue((state) => console.log(state));
+
+dispatchIncremented(); // Prints 1.
+dispatchIncremented(); // Prints 2.
+dispatchDecremented(); // Prints 1.
+```
+
+### Example: React Hook
+
+For linking a PubSub instance with a React element, import the `usePubSub` hook
+from `create-pubsub/react` and use it inside the component, similar to _React's
+useState_.
+
+```ts
+import { createPubSub } from "create-pubsub";
+import { usePubSub } from "create-pubsub/react";
+
+const counterPubSub = createPubSub(0);
+
+const ReactButton = () => {
+  const [count, setCount] = usePubSub(counterPubSub);
+
+  return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+};
 ```
