@@ -6,7 +6,11 @@
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.jsdocs.io/package/create-pubsub#package-index)
 [![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
 
-A tiny Event Emitter and Observable Store.
+A tiny Event Emitter and Observable Store for JavaScript apps.
+
+Supported environments: Browser, Node and Deno.
+
+It's a Vanilla JavaScript library, so it's framework-agnostic. But if you're using React, check out the built-in support for it in the examples.
 
 ## Install
 
@@ -197,7 +201,7 @@ For linking a PubSub instance with a React element, import the `usePubSub` hook
 from `create-pubsub/react` and use it inside the component, similar to _React's
 useState_.
 
-```ts
+```tsx
 import { createPubSub } from "create-pubsub";
 import { usePubSub } from "create-pubsub/react";
 
