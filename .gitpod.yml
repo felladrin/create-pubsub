@@ -1,3 +1,2 @@
 tasks:
-  - init: npx -yes pnpm install
-    command: npm install -g pnpm
+  - init: npm ci
