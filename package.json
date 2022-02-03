@@ -55,7 +55,7 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.0",
     "@skypack/package-check": "0.2.2",
-    "@types/react": "17.0.38",
+    "@types/react": "17.0.39",
     "del-cli": "4.0.1",
     "rollup": "2.67.0",
     "rollup-plugin-dts": "4.1.0",
