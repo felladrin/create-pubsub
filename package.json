@@ -4,7 +4,8 @@
   "description": "A tiny Event Emitter and Observable Store.",
   "files": [
     "main",
-    "react"
+    "react",
+    "derived"
   ],
   "types": "./main/index.d.ts",
   "main": "./main/index.js",
@@ -17,11 +18,15 @@
     "./react": {
       "import": "./react/index.module.js",
       "require": "./react/index.js"
+    },
+    "./derived": {
+      "import": "./derived/index.module.js",
+      "require": "./derived/index.js"
     }
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del main react && rollup -c",
+    "build": "del main react derived && rollup -c",
     "test": "uvu -r ts-node/register test",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run"
