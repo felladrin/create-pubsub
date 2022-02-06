@@ -54,4 +54,27 @@ export default defineConfig([
     },
     plugins: [dts()],
   },
+  {
+    input: "src/derived.ts",
+    output: [
+      {
+        file: "derived/index.js",
+        format: "umd",
+        name: "create-derived-pubsub",
+      },
+      {
+        file: "derived/index.module.js",
+        format: "es",
+      },
+    ],
+    plugins: [typescript(), terser()],
+  },
+  {
+    input: "src/derived.ts",
+    output: {
+      file: "derived/index.d.ts",
+      format: "es",
+    },
+    plugins: [dts()],
+  },
 ]);
