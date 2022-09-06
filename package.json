@@ -58,7 +58,7 @@
   },
   "homepage": "https://github.com/felladrin/create-pubsub#readme",
   "devDependencies": {
-    "@rollup/plugin-typescript": "8.4.0",
+    "@rollup/plugin-typescript": "8.5.0",
     "@skypack/package-check": "0.2.2",
     "@types/react": "18.0.18",
     "del-cli": "5.0.0",
