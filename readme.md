@@ -160,7 +160,7 @@ check if the value has changed or not since last time it was set, for example:
 const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
   name: "Player1",
   level: 5,
-  health: 33,
+  hp: 33,
   mana: 92,
 });
 
@@ -170,7 +170,7 @@ onPlayerChanged((playerState, previousPlayerState) => {
   }
 });
 
-updatePlayer({ ...getPlayer(), level: 6, health: 40 });
+updatePlayer({ ...getPlayer(), level: 6, hp: 40, mana: 100 });
 ```
 
 ### Example: State Management

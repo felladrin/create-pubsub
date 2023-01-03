@@ -208,7 +208,7 @@ test("previous stored data also works fine for non-primitive objects", () => {
   const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
     name: "Player1",
     level: 5,
-    life: 33,
+    hp: 33,
     mana: 92,
   });
 
@@ -223,10 +223,49 @@ test("previous stored data also works fine for non-primitive objects", () => {
     );
   });
 
-  updatePlayer({ ...getPlayer(), level: 6, life: 40 });
+  updatePlayer({ ...getPlayer(), level: 6, hp: 40 });
 
-  assert.equal(propertiesChanged, ["level", "life"]);
+  assert.equal(propertiesChanged, ["level", "hp"]);
   assert.equal(propertiesUnchanged, ["name", "mana"]);
+});
+
+test("for changing properties of an object from an array, it's recommended to slice the array and replace the object via index", () => {
+  const [updatePlayersList, onPlayersListUpdated, getPlayersList] =
+    createPubSub([
+      { name: "Player0", alive: true, color: { r: 0, g: 0, b: 0 } },
+      { name: "Player1", alive: false, color: { r: 255, g: 255, b: 255 } },
+    ]);
+
+  const updatedPlayersList = getPlayersList().slice();
+
+  updatedPlayersList[0] = {
+    name: "Player3",
+    alive: false,
+    color: { ...updatedPlayersList[0].color, r: 128, g: 64 },
+  };
+
+  updatedPlayersList[1] = {
+    ...updatedPlayersList[1],
+    alive: true,
+  };
+
+  onPlayersListUpdated((currentPlayersList, previousPlayersList) => {
+    assert.equal(currentPlayersList, [
+      { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
+      { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
+    ]);
+    assert.equal(previousPlayersList, [
+      { name: "Player0", alive: true, color: { r: 0, g: 0, b: 0 } },
+      { name: "Player1", alive: false, color: { r: 255, g: 255, b: 255 } },
+    ]);
+  });
+
+  updatePlayersList(updatedPlayersList);
+
+  assert.equal(getPlayersList(), [
+    { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
+    { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
+  ]);
 });
 
 test.run();
