@@ -5,7 +5,7 @@ import dts from "rollup-plugin-dts";
 
 export default defineConfig([
   {
-    input: "src/main.ts",
+    input: "src/main/index.ts",
     output: [
       {
         file: "main/index.js",
@@ -20,7 +20,7 @@ export default defineConfig([
     plugins: [typescript(), terser()],
   },
   {
-    input: "src/main.ts",
+    input: "src/main/index.ts",
     output: {
       file: "main/index.d.ts",
       format: "es",
@@ -28,7 +28,7 @@ export default defineConfig([
     plugins: [dts()],
   },
   {
-    input: "src/react.ts",
+    input: "src/react/index.ts",
     output: [
       {
         file: "react/index.js",
@@ -43,13 +43,37 @@ export default defineConfig([
         format: "es",
       },
     ],
-    external: ["react"],
+    external: ["react", "../main", "../immer"],
     plugins: [typescript(), terser()],
   },
   {
-    input: "src/react.ts",
+    input: "src/react/index.ts",
     output: {
       file: "react/index.d.ts",
+      format: "es",
+    },
+    plugins: [dts()],
+  },
+  {
+    input: "src/immer/index.ts",
+    output: [
+      {
+        file: "immer/index.js",
+        format: "umd",
+        name: "create-pubsub-immer",
+      },
+      {
+        file: "immer/index.module.js",
+        format: "es",
+      },
+    ],
+    external: ["immer", "../main"],
+    plugins: [typescript(), terser()],
+  },
+  {
+    input: "src/immer/index.ts",
+    output: {
+      file: "immer/index.d.ts",
       format: "es",
     },
     plugins: [dts()],

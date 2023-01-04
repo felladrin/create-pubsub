@@ -8,9 +8,9 @@
 
 A tiny Event Emitter and Observable Store for JavaScript apps.
 
-Supported environments: Browser, Node and Deno.
+Supported environments: [Browser](https://gs.statcounter.com/browser-market-share), [Node](https://nodejs.org/) and [Deno](https://deno.land/).
 
-It's a Vanilla JavaScript library, so it's framework-agnostic. But if you're using React, check out the built-in support for it in the examples.
+It's a Vanilla JavaScript library, so it's framework-agnostic. But if you're using [React](https://reactjs.org/), check out the built-in support for it in the examples. And if you're planning to store immutable data, check also the built-in support for [Immer](https://immerjs.github.io/immer/).
 
 ## Install
 
@@ -193,6 +193,54 @@ watchValue((state) => console.log(state));
 dispatchIncremented(); // Prints 1.
 dispatchIncremented(); // Prints 2.
 dispatchDecremented(); // Prints 1.
+```
+
+### Example: Working with Immutable Data
+
+For creating a PubSub instance that makes use of Immer, import the `createImmerPubSub`
+function from `create-pubsub/immer` and the Publish function will then provide the draft
+which you can mutate to generate the new state.
+
+```tsx
+import { createImmerPubSub } from "create-pubsub/immer";
+
+const [updateColorsList, onColorsListUpdated, getColorsList] =
+  createImmerPubSub([
+    { name: "White", code: { r: 255, g: 255, b: 255 } },
+    { name: "Gray", code: { r: 128, g: 128, b: 128 } },
+  ]);
+
+onColorsListUpdated((currentColorsList, previousColorsList) => {
+  console.log(currentColorsList);
+  // Prints:
+  // [
+  //   { name: "White", code: { r: 255, g: 255, b: 255 } },
+  //   { name: "Green", code: { r: 0, g: 128, b: 0 } },
+  // ]
+
+  console.log(previousColorsList);
+  // Prints:
+  // [
+  //   { name: "White", code: { r: 255, g: 255, b: 255 } },
+  //   { name: "Gray", code: { r: 128, g: 128, b: 128 } },
+  // ]
+});
+
+updateColorsList((colorsList) => {
+  const color = colorsList.find((color) => color.name === "Gray");
+  if (color) {
+    color.name = "Green";
+    color.code.r = 0;
+    color.code.b = 0;
+  }
+});
+
+console.log(getColorsList());
+// Prints:
+// [
+//   { name: "White", code: { r: 255, g: 255, b: 255 } },
+//   { name: "Green", code: { r: 0, g: 128, b: 0 } },
+// ]
 ```
 
 ### Example: React Hook

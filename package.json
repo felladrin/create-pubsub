@@ -4,7 +4,8 @@
   "description": "A tiny Event Emitter and Observable Store.",
   "files": [
     "main",
-    "react"
+    "react",
+    "immer"
   ],
   "types": "./main/index.d.ts",
   "main": "./main/index.js",
@@ -17,12 +18,16 @@
     "./react": {
       "import": "./react/index.module.js",
       "require": "./react/index.js"
+    },
+    "./immer": {
+      "import": "./immer/index.module.js",
+      "require": "./immer/index.js"
     }
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del main react && rollup -c --configPlugin typescript",
-    "test": "uvu -r ts-node/register test",
+    "build": "del main react immer && rollup -c --configPlugin typescript",
+    "test": "uvu -r ts-node/register -r global-jsdom/register test",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run"
   },
@@ -55,8 +60,14 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "10.0.1",
     "@skypack/package-check": "0.2.2",
+    "@testing-library/react": "13.4.0",
     "@types/react": "18.0.26",
     "del-cli": "5.0.0",
+    "global-jsdom": "8.6.0",
+    "immer": "9.0.17",
+    "jsdom": "20.0.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "rollup": "3.9.1",
     "rollup-plugin-dts": "5.1.0",
     "rollup-plugin-terser": "7.0.2",

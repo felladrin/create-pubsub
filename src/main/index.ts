@@ -85,22 +85,17 @@ export function createPubSub<T = void>(
 }
 
 //#region Public Types
-export type SubscriptionHandler<T = void> = (
-  data: Readonly<T>,
-  previousData: Readonly<T>
-) => void;
+export type SubscriptionHandler<T = void> = (data: T, previousData: T) => void;
 
 export type PublishFunction<T = void> = (data: T) => void;
 
 export type UnsubscribeFunction = () => void;
 
-export type GetFunction<T> = () => T extends Function ? T : Readonly<T>;
+export type GetFunction<T> = () => T;
 
 export type GetFunctionPossiblyUndefined<T = void> = () => T extends void
   ? undefined
-  : T extends Function
-  ? T | undefined
-  : Readonly<T> | undefined;
+  : T | undefined;
 
 export type SubscribeFunction<T> = (
   handler: SubscriptionHandler<T>
