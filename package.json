@@ -65,7 +65,7 @@
     "del-cli": "5.0.0",
     "global-jsdom": "8.6.0",
     "immer": "9.0.17",
-    "jsdom": "20.0.3",
+    "jsdom": "21.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rollup": "3.9.1",
