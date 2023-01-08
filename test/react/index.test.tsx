@@ -14,21 +14,21 @@ test("shows the children when the checkbox is checked", () => {
     return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
   };
 
-  assert.is(getCount(), 0);
+  assert.equal(getCount(), 0);
 
   render(<ReactButton />);
 
   const button = screen.getByText(/count/i);
 
-  assert.is.not(button, null);
+  assert.not.equal(button, null);
 
   fireEvent.click(button);
 
-  assert.is(getCount(), 1);
+  assert.equal(getCount(), 1);
 
   fireEvent.click(button);
 
-  assert.is(getCount(), 2);
+  assert.equal(getCount(), 2);
 });
 
 test.run();

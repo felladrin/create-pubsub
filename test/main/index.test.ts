@@ -7,7 +7,7 @@ test("random number should be transmitted accordingly", () => {
 
   const [pub, sub] = createPubSub<number>();
 
-  sub((data) => assert.is(data, randomNumber));
+  sub((data) => assert.equal(data, randomNumber));
 
   pub(randomNumber);
 });
@@ -17,7 +17,7 @@ test("destructuring the array created by createPubSub() show allow any function 
 
   const [publishRandomNumber, subscribeToRandomNumber] = createPubSub<number>();
 
-  subscribeToRandomNumber((data) => assert.is(data, randomNumber));
+  subscribeToRandomNumber((data) => assert.equal(data, randomNumber));
 
   publishRandomNumber(randomNumber);
 });
