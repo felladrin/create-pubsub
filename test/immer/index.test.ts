@@ -1,5 +1,5 @@
-import { test } from "uvu";
-import assert from "uvu/assert";
+import test from "node:test";
+import assert from "node:assert/strict";
 import { createImmerPubSub } from "../../src/immer";
 
 test("the example from readme.md", () => {
@@ -10,12 +10,12 @@ test("the example from readme.md", () => {
     ]);
 
   onColorsListUpdated((currentColorsList, previousColorsList) => {
-    assert.equal(currentColorsList, [
+    assert.deepEqual(currentColorsList, [
       { name: "White", code: { r: 255, g: 255, b: 255 } },
       { name: "Green", code: { r: 0, g: 128, b: 0 } },
     ]);
 
-    assert.equal(previousColorsList, [
+    assert.deepEqual(previousColorsList, [
       { name: "White", code: { r: 255, g: 255, b: 255 } },
       { name: "Gray", code: { r: 128, g: 128, b: 128 } },
     ]);
@@ -30,7 +30,7 @@ test("the example from readme.md", () => {
     }
   });
 
-  assert.equal(getColorsList(), [
+  assert.deepEqual(getColorsList(), [
     { name: "White", code: { r: 255, g: 255, b: 255 } },
     { name: "Green", code: { r: 0, g: 128, b: 0 } },
   ]);
@@ -44,11 +44,11 @@ test("changing properties of an object from an array", () => {
     ]);
 
   onPlayersListUpdated((currentPlayersList, previousPlayersList) => {
-    assert.equal(currentPlayersList, [
+    assert.deepEqual(currentPlayersList, [
       { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
       { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
     ]);
-    assert.equal(previousPlayersList, [
+    assert.deepEqual(previousPlayersList, [
       { name: "Player0", alive: true, color: { r: 0, g: 0, b: 0 } },
       { name: "Player1", alive: false, color: { r: 255, g: 255, b: 255 } },
     ]);
@@ -63,10 +63,8 @@ test("changing properties of an object from an array", () => {
     updatedPlayersList[1].alive = true;
   });
 
-  assert.equal(getPlayersList(), [
+  assert.deepEqual(getPlayersList(), [
     { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
     { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
   ]);
 });
-
-test.run();

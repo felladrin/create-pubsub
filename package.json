@@ -27,8 +27,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "del main react immer && rollup -c --configPlugin typescript",
-    "test": "uvu -r ts-node/register -r global-jsdom/register test",
-    "test-watch": "watchlist test -- npm test",
+    "test": "node -r ts-node/register -r global-jsdom/register --test test/main/index.test.ts test/immer/index.test.ts test/react/index.test.tsx",
+    "test-watch": "node -r ts-node/register -r global-jsdom/register --test --watch test/main/index.test.ts test/immer/index.test.ts test/react/index.test.tsx",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run"
   },
@@ -74,8 +74,6 @@
     "rollup-plugin-terser": "7.0.2",
     "ts-node": "10.9.1",
     "tslib": "2.4.1",
-    "typescript": "4.9.4",
-    "uvu": "0.5.6",
-    "watchlist": "^0.3.1"
+    "typescript": "4.9.4"
   }
 }
