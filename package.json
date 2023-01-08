@@ -28,6 +28,7 @@
   "scripts": {
     "build": "del main react immer && rollup -c --configPlugin typescript",
     "test": "uvu -r ts-node/register -r global-jsdom/register test",
+    "test-watch": "watchlist test -- npm test",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run"
   },
@@ -74,6 +75,7 @@
     "ts-node": "10.9.1",
     "tslib": "2.4.1",
     "typescript": "4.9.4",
-    "uvu": "0.5.6"
+    "uvu": "0.5.6",
+    "watchlist": "^0.3.1"
   }
 }
