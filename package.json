@@ -62,7 +62,7 @@
     "@rollup/plugin-typescript": "11.0.0",
     "@skypack/package-check": "0.2.2",
     "@testing-library/react": "14.0.0",
-    "@types/react": "18.0.29",
+    "@types/react": "18.0.30",
     "del-cli": "5.0.0",
     "global-jsdom": "8.8.0",
     "immer": "9.0.21",
