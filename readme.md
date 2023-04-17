@@ -146,9 +146,11 @@ console.log(get()); // Prints "red".
 
 set("blue"); // Sets the store to "blue", but nothing is printed.
 
-sub((state) => console.log(state)); // Subscribe to the next store updates.
+sub((state) => console.log(state)); // Subscribe to next store updates.
 
 set("green"); // Sets the store to "green" and prints it.
+
+console.log(get()); // Prints "green".
 ```
 
 ### Example: Action & Reaction
