@@ -65,7 +65,7 @@
     "@types/react": "18.0.37",
     "del-cli": "5.0.0",
     "global-jsdom": "8.8.0",
-    "immer": "10.0.0",
+    "immer": "10.0.1",
     "jsdom": "21.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
