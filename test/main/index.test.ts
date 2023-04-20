@@ -1,5 +1,5 @@
-import { test } from "uvu";
-import assert from "uvu/assert";
+import test from "node:test";
+import assert from "node:assert/strict";
 import { createPubSub } from "../../src/main";
 
 test("random number should be transmitted accordingly", () => {
@@ -37,7 +37,7 @@ test("synchronous subscriptions should be dispatched in sequence", () => {
 
   pub();
 
-  assert.equal(subscriptionHandlersIds, [1, 2, 3]);
+  assert.deepEqual(subscriptionHandlersIds, [1, 2, 3]);
 });
 
 test("subscribing only once should work properly", () => {
@@ -142,9 +142,9 @@ test("it should stop publishing the old value if a reaction during the publish p
   publish(3);
   publish(4);
 
-  assert.equal(numbersReceivedOnFirstSubscription, [1, 2, 5, 3, 4]);
-  assert.equal(numbersReceivedOnSecondSubscription, [1, 2, 5, 3, 4]);
-  assert.equal(numbersReceivedOnThirdSubscription, [1, 5, 3, 4]);
+  assert.deepEqual(numbersReceivedOnFirstSubscription, [1, 2, 5, 3, 4]);
+  assert.deepEqual(numbersReceivedOnSecondSubscription, [1, 2, 5, 3, 4]);
+  assert.deepEqual(numbersReceivedOnThirdSubscription, [1, 5, 3, 4]);
 });
 
 test("it should also work as a store", () => {
@@ -197,8 +197,8 @@ test("the previous stored data is also dispatched, to allow comparison with curr
   publishNumber(4);
   publishNumber(5);
 
-  assert.equal(numbersReceived, [1, 2, 2, 3, 3, 3, 4, 3, 4, 4, 5]);
-  assert.equal(nonSequentiallyEqualNumbersReceived, [1, 2, 3, 4, 3, 4, 5]);
+  assert.deepEqual(numbersReceived, [1, 2, 2, 3, 3, 3, 4, 3, 4, 4, 5]);
+  assert.deepEqual(nonSequentiallyEqualNumbersReceived, [1, 2, 3, 4, 3, 4, 5]);
 });
 
 test("previous stored data also works fine for non-primitive objects", () => {
@@ -225,8 +225,8 @@ test("previous stored data also works fine for non-primitive objects", () => {
 
   updatePlayer({ ...getPlayer(), level: 6, hp: 40 });
 
-  assert.equal(propertiesChanged, ["level", "hp"]);
-  assert.equal(propertiesUnchanged, ["name", "mana"]);
+  assert.deepEqual(propertiesChanged, ["level", "hp"]);
+  assert.deepEqual(propertiesUnchanged, ["name", "mana"]);
 });
 
 test("for changing properties of an object from an array, it's recommended to slice the array and replace the object via index", () => {
@@ -250,11 +250,11 @@ test("for changing properties of an object from an array, it's recommended to sl
   };
 
   onPlayersListUpdated((currentPlayersList, previousPlayersList) => {
-    assert.equal(currentPlayersList, [
+    assert.deepEqual(currentPlayersList, [
       { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
       { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
     ]);
-    assert.equal(previousPlayersList, [
+    assert.deepEqual(previousPlayersList, [
       { name: "Player0", alive: true, color: { r: 0, g: 0, b: 0 } },
       { name: "Player1", alive: false, color: { r: 255, g: 255, b: 255 } },
     ]);
@@ -262,10 +262,8 @@ test("for changing properties of an object from an array, it's recommended to sl
 
   updatePlayersList(updatedPlayersList);
 
-  assert.equal(getPlayersList(), [
+  assert.deepEqual(getPlayersList(), [
     { name: "Player3", alive: false, color: { r: 128, g: 64, b: 0 } },
     { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
   ]);
 });
-
-test.run();
