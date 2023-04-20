@@ -1,6 +1,6 @@
 import { defineConfig } from "rollup";
 import { fileURLToPath } from "node:url";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 
