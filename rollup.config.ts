@@ -1,4 +1,5 @@
 import { defineConfig } from "rollup";
+import { fileURLToPath } from "node:url";
 import { terser } from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
@@ -61,6 +62,11 @@ export default defineConfig([
         file: "immer/index.js",
         format: "umd",
         name: "create-pubsub-immer",
+        globals: {
+          immer: "immer",
+          [fileURLToPath(new URL("src/main", import.meta.url))]:
+            "create-pubsub",
+        },
       },
       {
         file: "immer/index.module.js",
