@@ -1,5 +1,5 @@
-import { test } from "uvu";
-import assert from "uvu/assert";
+import test from "node:test";
+import assert from "node:assert/strict";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { createPubSub } from "../../src/main";
 import { usePubSub } from "../../src/react";
@@ -20,7 +20,7 @@ test("shows the children when the checkbox is checked", () => {
 
   const button = screen.getByText(/count/i);
 
-  assert.not.equal(button, null);
+  assert.notEqual(button, null);
 
   fireEvent.click(button);
 
@@ -31,4 +31,3 @@ test("shows the children when the checkbox is checked", () => {
   assert.equal(getCount(), 2);
 });
 
-test.run();
