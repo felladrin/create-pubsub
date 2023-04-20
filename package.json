@@ -27,7 +27,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "del main react immer && rollup -c --configPlugin typescript",
-    "test": "node -r @esbuild-kit/cjs-loader -r global-jsdom/register --test test/**/*.test.{ts,tsx}",
+    "test": "node -r @esbuild-kit/cjs-loader -r global-jsdom/register --test test/**/*.ts test/**/*.tsx",
     "test-watch": "watchlist test -- npm test",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run"
