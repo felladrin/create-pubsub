@@ -9,18 +9,18 @@
   ],
   "types": "./main/index.d.ts",
   "main": "./main/index.js",
-  "module": "./main/index.module.js",
+  "module": "./main/index.mjs",
   "exports": {
     ".": {
-      "import": "./main/index.module.js",
+      "import": "./main/index.mjs",
       "require": "./main/index.js"
     },
     "./react": {
-      "import": "./react/index.module.js",
+      "import": "./react/index.mjs",
       "require": "./react/index.js"
     },
     "./immer": {
-      "import": "./immer/index.module.js",
+      "import": "./immer/index.mjs",
       "require": "./immer/index.js"
     }
   },

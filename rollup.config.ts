@@ -14,7 +14,7 @@ export default defineConfig([
         name: "create-pubsub",
       },
       {
-        file: "main/index.module.js",
+        file: "main/index.mjs",
         format: "es",
       },
     ],
@@ -40,7 +40,7 @@ export default defineConfig([
         },
       },
       {
-        file: "react/index.module.js",
+        file: "react/index.mjs",
         format: "es",
       },
     ],
@@ -69,7 +69,7 @@ export default defineConfig([
         },
       },
       {
-        file: "immer/index.module.js",
+        file: "immer/index.mjs",
         format: "es",
       },
     ],
