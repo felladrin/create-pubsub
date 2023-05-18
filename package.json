@@ -77,7 +77,7 @@
     "react-dom": "18.2.0",
     "rollup": "3.22.0",
     "rollup-plugin-dts": "5.3.0",
-    "tslib": "2.5.1",
+    "tslib": "2.5.2",
     "typescript": "5.0.4",
     "watchlist": "0.3.1"
   }
