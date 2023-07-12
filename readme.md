@@ -1,10 +1,9 @@
 # Create PubSub
 
 [![NPM Version](https://img.shields.io/npm/v/create-pubsub.svg?style=flat)](https://www.npmjs.org/package/create-pubsub)
-[![Size](https://img.shields.io/bundlephobia/minzip/create-pubsub)](https://bundlephobia.com/package/create-pubsub)
-[![Known Vulnerabilities](https://snyk.io/test/npm/create-pubsub/badge.svg)](https://snyk.io/test/npm/create-pubsub)
+[![Size](https://img.shields.io/bundlephobia/minzip/create-pubsub?label=size&style=flat)](https://bundlephobia.com/package/create-pubsub)
 [![Types](https://img.shields.io/npm/types/create-pubsub)](https://www.jsdocs.io/package/create-pubsub#package-index)
-[![License](https://img.shields.io/github/license/felladrin/create-pubsub)](http://victor.mit-license.org/)
+[![License](https://badgen.net/npm/license/create-pubsub)](http://victor.mit-license.org/)
 
 A tiny Event Emitter and Observable Store for JavaScript apps.
 
