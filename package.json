@@ -63,7 +63,7 @@
   "homepage": "https://github.com/felladrin/create-pubsub#readme",
   "devDependencies": {
     "@esbuild-kit/cjs-loader": "2.4.4",
-    "@rollup/plugin-terser": "0.4.3",
+    "@rollup/plugin-terser": "0.4.4",
     "@rollup/plugin-typescript": "11.1.4",
     "@skypack/package-check": "0.2.2",
     "@testing-library/react": "14.0.0",
