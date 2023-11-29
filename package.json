@@ -67,7 +67,7 @@
     "@rollup/plugin-typescript": "11.1.5",
     "@skypack/package-check": "0.2.2",
     "@testing-library/react": "14.1.2",
-    "@types/node": "20.10.0",
+    "@types/node": "20.10.1",
     "@types/react": "18.2.39",
     "del-cli": "5.1.0",
     "global-jsdom": "9.1.0",
