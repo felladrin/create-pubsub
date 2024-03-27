@@ -68,7 +68,7 @@
     "@skypack/package-check": "0.2.2",
     "@testing-library/react": "14.2.2",
     "@types/node": "20.11.30",
-    "@types/react": "18.2.72",
+    "@types/react": "18.2.73",
     "del-cli": "5.1.0",
     "global-jsdom": "24.0.0",
     "immer": "10.0.4",
