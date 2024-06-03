@@ -66,6 +66,7 @@
     "@rollup/plugin-terser": "0.4.4",
     "@rollup/plugin-typescript": "11.1.6",
     "@skypack/package-check": "0.2.2",
+    "@testing-library/dom": "^10.1.0",
     "@testing-library/react": "16.0.0",
     "@types/node": "20.14.0",
     "@types/react": "18.3.3",
