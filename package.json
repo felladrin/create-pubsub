@@ -29,7 +29,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del main react immer && rollup -c --configPlugin typescript",
+    "build": "del main react immer && rollup -c && npx tsc --emitDeclarationOnly --declaration --outDir .temp-types && mv .temp-types/src/main/index.d.ts main/ && mv .temp-types/src/react/index.d.ts react/ && mv .temp-types/src/immer/index.d.ts immer/ && rm -rf .temp-types",
     "test": "node -r @esbuild-kit/cjs-loader -r global-jsdom/register --test test/**/*.ts test/**/*.tsx",
     "test-watch": "watchlist test -- npm test",
     "prepare": "package-check && npm run build",
@@ -77,9 +77,9 @@
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "rollup": "4.62.2",
-    "rollup-plugin-dts": "6.4.1",
+    "rollup-plugin-esbuild": "^6.2.1",
     "tslib": "2.8.1",
-    "typescript": "6.0.3",
+    "typescript": "^7.0.2",
     "watchlist": "0.3.1"
   }
 }
