@@ -1,8 +1,7 @@
 import { defineConfig } from "rollup";
 import { fileURLToPath } from "node:url";
 import terser from "@rollup/plugin-terser";
-import typescript from "@rollup/plugin-typescript";
-import dts from "rollup-plugin-dts";
+import esbuild from "rollup-plugin-esbuild";
 
 export default defineConfig([
   {
@@ -18,15 +17,7 @@ export default defineConfig([
         format: "es",
       },
     ],
-    plugins: [typescript(), terser()],
-  },
-  {
-    input: "src/main/index.ts",
-    output: {
-      file: "main/index.d.ts",
-      format: "es",
-    },
-    plugins: [dts()],
+    plugins: [esbuild(), terser()],
   },
   {
     input: "src/react/index.ts",
@@ -45,15 +36,7 @@ export default defineConfig([
       },
     ],
     external: ["react", "../main", "../immer"],
-    plugins: [typescript(), terser()],
-  },
-  {
-    input: "src/react/index.ts",
-    output: {
-      file: "react/index.d.ts",
-      format: "es",
-    },
-    plugins: [dts()],
+    plugins: [esbuild(), terser()],
   },
   {
     input: "src/immer/index.ts",
@@ -74,14 +57,6 @@ export default defineConfig([
       },
     ],
     external: ["immer", "../main"],
-    plugins: [typescript(), terser()],
-  },
-  {
-    input: "src/immer/index.ts",
-    output: {
-      file: "immer/index.d.ts",
-      format: "es",
-    },
-    plugins: [dts()],
+    plugins: [esbuild(), terser()],
   },
 ]);
