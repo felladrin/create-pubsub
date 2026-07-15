@@ -5,7 +5,7 @@ import { createPubSub } from "../../src/main";
 import { usePubSub } from "../../src/react";
 
 describe("react", () => {
-  it("shows the children when the checkbox is checked", () => {
+  it("increments the counter when the button is clicked", () => {
     const counterPubSub = createPubSub(0);
     const [, , getCount] = counterPubSub;
 

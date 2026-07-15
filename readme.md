@@ -4,7 +4,7 @@ A tiny Event Emitter and Observable Store for JavaScript apps.
 
 Supported environments: [Browser](https://gs.statcounter.com/browser-market-share), [Node](https://nodejs.org/) and [Deno](https://deno.land/).
 
-This a Vanilla JavaScript library, so it's framework-agnostic. But if you're using [React](https://reactjs.org/), check out the built-in support for it in the examples. And if you're planning to store immutable data, check also the built-in support for [Immer](https://immerjs.github.io/immer/).
+This is a Vanilla JavaScript library, so it's framework-agnostic. But if you're using [React](https://reactjs.org/), check out the built-in support for it in the examples. And if you're planning to store immutable data, check also the built-in support for [Immer](https://immerjs.github.io/immer/).
 
 ## Install
 
@@ -151,8 +151,8 @@ console.log(get()); // Prints "green".
 
 ### Example: Action & Reaction
 
-You also receive the value to the previous value stored there, so you can
-check if the value has changed or not since last time it was set, for example:
+You also receive the previous value along with the new one, so you can check whether
+it has changed or not since last time it was set, for example:
 
 ```ts
 const [updatePlayer, onPlayerChanged, getPlayer] = createPubSub({
