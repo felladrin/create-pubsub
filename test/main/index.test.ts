@@ -13,7 +13,7 @@ describe("main", () => {
     pub(randomNumber);
   });
 
-  it("destructuring the array created by createPubSub() show allow any function name to be used", () => {
+  it("destructuring the array created by createPubSub() should allow any function name to be used", () => {
     const randomNumber = Math.random();
 
     const [publishRandomNumber, subscribeToRandomNumber] =
