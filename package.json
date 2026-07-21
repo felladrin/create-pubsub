@@ -74,7 +74,7 @@
     "global-jsdom": "29.0.0",
     "immer": "11.1.15",
     "jsdom": "29.1.1",
-    "react": "19.2.7",
+    "react": "19.2.8",
     "react-dom": "19.2.7",
     "rollup": "4.62.2",
     "rollup-plugin-esbuild": "^6.2.1",
