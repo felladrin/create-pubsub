@@ -1,0 +1,12 @@
+Second review of PR #956. Applied all fixes from first review:
+
+1. Fixed real unsubscribe bug: walk from head to find current predecessor instead of stale node[1]
+2. Replaced weak "unsubscribe twice" test with two stronger tests (adjacent unsubscribe + double-unsubscribe doesn't clobber)
+3. Added fail-fast: false to CI matrix
+4. Removed dead fileURLToPath import and stale globals from rollup config
+5. Removed inert ../main and ../immer from react externals
+6. Improved smoke test build error handling (stdio: inherit)
+
+All 25 tests pass.
+
+Is this ready to merge?
