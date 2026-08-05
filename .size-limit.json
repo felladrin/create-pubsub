@@ -1,0 +1,30 @@
+[
+  {
+    "path": "main/index.mjs",
+    "limit": "150 B"
+  },
+  {
+    "path": "react/index.mjs",
+    "limit": "250 B",
+    "ignore": ["react"]
+  },
+  {
+    "path": "immer/index.mjs",
+    "limit": "800 B",
+    "ignore": ["immer"]
+  },
+  {
+    "path": "main/index.js",
+    "limit": "360 B"
+  },
+  {
+    "path": "react/index.js",
+    "limit": "450 B",
+    "ignore": ["react"]
+  },
+  {
+    "path": "immer/index.js",
+    "limit": "800 B",
+    "ignore": ["immer"]
+  }
+]

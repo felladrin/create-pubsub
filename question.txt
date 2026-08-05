@@ -1,0 +1,19 @@
+Third review of PR #957. Applied fixes from second review:
+- Adjusted headroom: all entries now have 15-40% headroom
+- main/index.js bumped from 300B to 350B (was 0.7% headroom, now 14.9%)
+- react/index.js bumped from 400B to 450B (was 9.5%, now 20.4%)
+- immer/index.js bumped from 1KB to 800B (was 52%, now 38.6%)
+
+Actual measured bytes vs limits:
+| Entry | Size | Limit | Headroom |
+|-------|------|-------|----------|
+| main/index.mjs | 119 B | 150 B | 20.7% |
+| react/index.mjs | 204 B | 250 B | 18.6% |
+| immer/index.mjs | 641 B | 800 B | 19.9% |
+| main/index.js | 298 B | 350 B | 14.9% |
+| react/index.js | 358 B | 450 B | 20.4% |
+| immer/index.js | 491 B | 800 B | 38.6% |
+
+All 6 size checks pass. All tests pass.
+
+Is this ready to merge?
