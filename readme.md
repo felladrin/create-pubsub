@@ -1,10 +1,22 @@
 # Create PubSub
 
-A tiny Event Emitter and Observable Store for JavaScript apps.
+A tiny Event Emitter and Observable Store for JavaScript apps. You destructure a pair of named functions instead of passing event-name strings around, so there are no event names to keep in sync and your editor completes them for you.
 
-Supported environments: [Browser](https://gs.statcounter.com/browser-market-share), [Node](https://nodejs.org/) and [Deno](https://deno.land/).
+- **Tiny.** The ES Module build is 207 bytes (175 gzipped), with zero dependencies.
+- **No string event names.** `const [gameStarted, onGameStarted] = createPubSub()`, and you pick both names.
+- **Emitter or store.** Pass an initial value and you also get a getter, plus the previous value on every update.
+- **Runs everywhere.** Browser, [Node](https://nodejs.org/) and [Deno](https://deno.com/), as an ES Module, a CommonJS module or a plain script tag.
+- **Optional extras.** A [`usePubSub` React hook](#example-react-hook) and an [Immer-backed variant](#example-working-with-immutable-data), in separate entry points.
 
-This is a Vanilla JavaScript library, so it's framework-agnostic. But if you're using [React](https://reactjs.org/), check out the built-in support for it in the examples. And if you're planning to store immutable data, check also the built-in support for [Immer](https://immerjs.github.io/immer/).
+```ts
+const [pub, sub] = createPubSub<string>();
+
+sub((data) => console.log(`Hello ${data}!`));
+
+pub("World"); // Prints "Hello World!".
+```
+
+It's written in vanilla JavaScript, so it's framework-agnostic.
 
 ## Install
 
@@ -58,16 +70,6 @@ const [pub, sub, get] = createPubSub(initialValue);
 ```
 
 ## Examples
-
-### Example: Getting Started
-
-```ts
-const [pub, sub] = createPubSub<string>();
-
-sub((data) => console.log(`Hello ${data}!`));
-
-pub("World"); // Prints "Hello World!".
-```
 
 ### Example: Naming Functions
 
