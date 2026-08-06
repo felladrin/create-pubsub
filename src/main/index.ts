@@ -21,7 +21,7 @@ export function createPubSub<T = void>(
    * Node on the head of the list, which has no value,
    * and is used just for reference to other nodes.
    */
-  let head = [] as unknown as SubscriptionListNode<T>;
+  const head = [] as unknown as SubscriptionListNode<T>;
 
   return [
     (data: T) => {
@@ -29,7 +29,7 @@ export function createPubSub<T = void>(
        * Constant holding the value of stored data before it's
        * updated, to publish it along with the new data.
        */
-      let previousData = storedData as T;
+      const previousData = storedData as T;
 
       // Store the data being published in this loop, to compare
       // if it has changed during the publishing process.
@@ -72,8 +72,13 @@ export function createPubSub<T = void>(
         // If node has value 0, it means it was unsubscribed before, so we stop here.
         if (!node) return;
 
-        // Otherwise, link the next node - even if it's undefined - to the previous node.
-        node[1][2] = node[2];
+        // Walk from head to find the current predecessor, because node[1]
+        // (captured at subscribe time) may point to a detached node.
+        let prev = head;
+        while (prev[2] && prev[2] !== node) prev = prev[2];
+
+        // Link the predecessor's next pointer around this node.
+        if (prev[2] === node) prev[2] = node[2];
 
         // So this node is not on the list anymore, and we can remove the handler reference
         // from it, and we also set its value to zero, to prevent unsubscribing more than once.
