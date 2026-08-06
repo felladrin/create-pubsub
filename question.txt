@@ -1,0 +1,19 @@
+Fifth review of PR #955. Applied all fixes from previous reviews.
+
+Summary of changes:
+- src/react/index.ts: useSyncExternalStore(subscribe, get, get) replaces useState + useEffect
+- package.json: react >=18 as optional peer dep, version bumped to 2.0.0
+- test/react/index.test.tsx: 7 react tests (20 total including main and immer)
+
+Tests cover:
+1. Counter increment on click
+2. External publish triggers re-render
+3. Unmounting unsubscribes (counts live subscriptions directly)
+4. StrictMode double-mount no leak (verifies totalSubscriptions==2 AND liveSubscriptions==0 after unmount)
+5. Publish before subscribe catches value
+6. Function-valued stores not invoked as updaters
+7. SSR renderToString works (getServerSnapshot coverage)
+
+All 20 tests pass. question.txt removed from repo.
+
+Is this ready to merge?
