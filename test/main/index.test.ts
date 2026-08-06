@@ -272,4 +272,97 @@ describe("main", () => {
       { name: "Player1", alive: true, color: { r: 255, g: 255, b: 255 } },
     ]);
   });
+
+  it("unsubscribing twice should not drop subscriptions added in between", () => {
+    const calls: string[] = [];
+
+    const [publish, subscribe] = createPubSub<number>();
+
+    subscribe(() => calls.push("first"));
+    const unsubscribeSecond = subscribe(() => calls.push("second"));
+
+    unsubscribeSecond();
+    subscribe(() => calls.push("third"));
+    unsubscribeSecond();
+
+    publish(1);
+
+    assert.deepEqual(calls, ["first", "third"]);
+  });
+
+  it("unsubscribing handlers in subscription order should remove all of them", () => {
+    const calls: string[] = [];
+
+    const [publish, subscribe] = createPubSub<number>();
+
+    const unsubscribeFirst = subscribe(() => calls.push("first"));
+    const unsubscribeSecond = subscribe(() => calls.push("second"));
+
+    unsubscribeFirst();
+    unsubscribeSecond();
+
+    publish(1);
+
+    assert.deepEqual(calls, []);
+  });
+
+  it("unsubscribing another handler mid-publish should not crash", () => {
+    const order: string[] = [];
+
+    const [publish, subscribe] = createPubSub<number>();
+
+    const unsubscribeSecond = subscribe(() => {
+      order.push("second");
+    });
+
+    subscribe(() => {
+      order.push("third");
+      unsubscribeSecond();
+    });
+
+    subscribe(() => {
+      order.push("fourth");
+    });
+
+    publish(1);
+
+    assert.deepEqual(order, ["second", "third", "fourth"]);
+
+    publish(2);
+
+    // After first publish, "second" is unsubscribed; only "third" and "fourth" remain
+    assert.deepEqual(order, ["second", "third", "fourth", "third", "fourth"]);
+  });
+
+  it("subscribing mid-publish should reach the new subscriber in the current publish loop", () => {
+    const order: number[] = [];
+
+    const [publish, subscribe] = createPubSub<number>();
+
+    subscribe(() => {
+      order.push(1);
+    });
+
+    subscribe(() => {
+      order.push(2);
+      subscribe(() => {
+        order.push(3);
+      });
+    });
+
+    subscribe(() => {
+      order.push(4);
+    });
+
+    publish(1);
+
+    // New subscriber is appended to tail; traversal reaches it after existing nodes
+    assert.deepEqual(order, [1, 2, 4, 3]);
+  });
+
+  it("get() before anything is published returns undefined when no initial value is set", () => {
+    const [, , get] = createPubSub();
+
+    assert.equal(get(), undefined);
+  });
 });
