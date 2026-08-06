@@ -1,5 +1,4 @@
 import { defineConfig } from "rollup";
-import { fileURLToPath } from "node:url";
 import terser from "@rollup/plugin-terser";
 import esbuild from "rollup-plugin-esbuild";
 
@@ -35,7 +34,7 @@ export default defineConfig([
         format: "es",
       },
     ],
-    external: ["react", "../main", "../immer"],
+    external: ["react"],
     plugins: [esbuild(), terser()],
   },
   {
@@ -47,8 +46,6 @@ export default defineConfig([
         name: "create-pubsub-immer",
         globals: {
           immer: "immer",
-          [fileURLToPath(new URL("src/main", import.meta.url))]:
-            "create-pubsub",
         },
       },
       {
@@ -56,7 +53,7 @@ export default defineConfig([
         format: "es",
       },
     ],
-    external: ["immer", "../main"],
+    external: ["immer"],
     plugins: [esbuild(), terser()],
   },
 ]);

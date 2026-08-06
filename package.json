@@ -33,7 +33,8 @@
     "test": "node -r tsx/cjs -r global-jsdom/register --test test/**/*.ts test/**/*.tsx",
     "test-watch": "watchlist test -- npm test",
     "prepare": "package-check && npm run build",
-    "preview-package-contents": "npm pack --dry-run"
+    "preview-package-contents": "npm pack --dry-run",
+    "postbuild": "node --input-type=module -e \"await import('./main/index.mjs'); await import('./immer/index.mjs'); await import('./react/index.mjs')\""
   },
   "repository": {
     "type": "git",
