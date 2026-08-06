@@ -81,5 +81,17 @@
     "tslib": "2.8.1",
     "typescript": "^7.0.2",
     "watchlist": "0.3.1"
+  },
+  "peerDependencies": {
+    "react": ">=16.8",
+    "immer": ">=9"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "immer": {
+      "optional": true
+    }
   }
 }
