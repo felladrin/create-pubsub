@@ -34,7 +34,8 @@
     "test-watch": "watchlist test -- npm test",
     "prepare": "package-check && npm run build",
     "preview-package-contents": "npm pack --dry-run",
-    "postbuild": "node --input-type=module -e \"await import('./main/index.mjs'); await import('./immer/index.mjs'); await import('./react/index.mjs')\""
+    "postbuild": "node --input-type=module -e \"await import('./main/index.mjs'); await import('./immer/index.mjs'); await import('./react/index.mjs')\"",
+    "size-check": "size-limit"
   },
   "repository": {
     "type": "git",
@@ -65,6 +66,7 @@
   "devDependencies": {
     "@rollup/plugin-terser": "1.0.0",
     "@rollup/plugin-typescript": "12.3.0",
+    "@size-limit/preset-small-lib": "13.0.3",
     "@skypack/package-check": "0.2.2",
     "@testing-library/dom": "^10.1.0",
     "@testing-library/react": "16.3.2",
@@ -78,6 +80,7 @@
     "react-dom": "19.2.8",
     "rollup": "4.62.4",
     "rollup-plugin-esbuild": "^6.2.1",
+    "size-limit": "13.0.3",
     "tslib": "2.8.1",
     "tsx": "4.23.8",
     "typescript": "^7.0.2",
