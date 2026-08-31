@@ -1,6 +1,6 @@
 {
   "name": "create-pubsub",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "A tiny Event Emitter and Observable Store.",
   "files": [
     "main",
@@ -87,7 +87,7 @@
     "watchlist": "0.3.1"
   },
   "peerDependencies": {
-    "react": ">=16.8",
+    "react": ">=18",
     "immer": ">=9"
   },
   "peerDependenciesMeta": {
