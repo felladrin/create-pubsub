@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
-import type { PublishImmerFunction } from "../immer";
-import type { GetFunction, PublishFunction, SubscribeFunction } from "../main";
+import type { PublishImmerFunction } from "../immer/index.js";
+import type { GetFunction, PublishFunction, SubscribeFunction } from "../main/index.js";
 
 export function usePubSub<T>([publish, subscribe, get]: [
   publish: PublishFunction<T>,

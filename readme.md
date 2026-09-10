@@ -5,7 +5,7 @@ A tiny Event Emitter and Observable Store for JavaScript apps. You destructure a
 - **Tiny.** The ES Module build is 207 bytes (175 gzipped), with zero dependencies.
 - **No string event names.** `const [gameStarted, onGameStarted] = createPubSub()`, and you pick both names.
 - **Emitter or store.** Pass an initial value and you also get a getter, plus the previous value on every update.
-- **Runs everywhere.** Browser, [Node](https://nodejs.org/) and [Deno](https://deno.com/), as an ES Module, a CommonJS module or a plain script tag.
+- **Runs everywhere.** Browser, [Node](https://nodejs.org/) and [Deno](https://deno.com/), as an ES Module.
 - **Optional extras.** A [`usePubSub` React hook](#example-react-hook) and an [Immer-backed variant](#example-working-with-immutable-data), in separate entry points.
 
 ```ts
@@ -34,7 +34,7 @@ import { createPubSub } from "create-pubsub";
 ```
 
 ```js
-// Or require as a CommonJS Module.
+// Or require it from CommonJS, on Node 20.19+ or 22.12+.
 const { createPubSub } = require("create-pubsub");
 ```
 
@@ -45,9 +45,8 @@ import { createPubSub } from "https://esm.sh/create-pubsub";
 
 ```html
 <!-- Or use it directly in the browser. -->
-<script src="https://unpkg.com/create-pubsub"></script>
-<script>
-  const { createPubSub } = window["create-pubsub"];
+<script type="module">
+  import { createPubSub } from "https://esm.sh/create-pubsub";
 </script>
 ```
 
