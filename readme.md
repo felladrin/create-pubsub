@@ -247,7 +247,11 @@ console.log(getColorsList());
 
 For linking a PubSub instance with a React element, import the `usePubSub` hook
 from `create-pubsub/react` and use it inside the component, similar to _React's
-useState_.
+useState_. It uses `useSyncExternalStore`, so it requires React 18 or later.
+
+Create the PubSub instance outside the component, as in the example below. The
+hook subscribes to the instance you pass it, so creating a new one on every
+render makes it re-subscribe on every render.
 
 ```tsx
 import { createPubSub } from "create-pubsub";
