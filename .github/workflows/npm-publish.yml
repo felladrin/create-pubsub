@@ -18,4 +18,4 @@ jobs:
      - run: npm install -g npm
      - run: npm ci
      - run: npm test
-     - run: npm publish --provenance --access public
+     - run: npm stage publish --provenance --access public
