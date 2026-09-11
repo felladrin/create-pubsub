@@ -2,7 +2,7 @@
 
 A tiny Event Emitter and Observable Store for JavaScript apps. You destructure a pair of named functions instead of passing event-name strings around, so there are no event names to keep in sync and your editor completes them for you.
 
-- **Tiny.** The ES Module build is 207 bytes (175 gzipped), with zero dependencies.
+- **Tiny.** The ES Module build is 264 bytes, or 138 brotli-compressed, with zero dependencies.
 - **No string event names.** `const [gameStarted, onGameStarted] = createPubSub()`, and you pick both names.
 - **Emitter or store.** Pass an initial value and you also get a getter, plus the previous value on every update.
 - **Runs everywhere.** Browser, [Node](https://nodejs.org/) and [Deno](https://deno.com/), as an ES Module.
