@@ -1,5 +1,5 @@
 import { Draft, produce } from "immer";
-import { createPubSub, GetFunction, SubscribeFunction } from "../main";
+import { createPubSub, GetFunction, SubscribeFunction } from "../main/index.js";
 
 export type DraftFunction<T> = (draft: Draft<T>) => void;
 export type PublishImmerFunction<T> = (draftFunction: DraftFunction<T>) => void;
