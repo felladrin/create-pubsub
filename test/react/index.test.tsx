@@ -9,8 +9,8 @@ import {
 	act,
 	cleanup,
 } from "@testing-library/react";
-import { createPubSub } from "../../src/main";
-import { usePubSub } from "../../src/react";
+import { createPubSub } from "../../src/main/index.js";
+import { usePubSub } from "../../src/react/index.js";
 
 describe("react", () => {
 	afterEach(cleanup);

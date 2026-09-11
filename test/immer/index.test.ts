@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import { strict as assert } from "node:assert";
-import { createImmerPubSub } from "../../src/immer";
+import { createImmerPubSub } from "../../src/immer/index.js";
 
 describe("immer", () => {
   it("the example from readme.md", () => {

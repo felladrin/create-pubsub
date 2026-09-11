@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import { strict as assert } from "node:assert";
-import { createPubSub } from "../../src/main";
+import { createPubSub } from "../../src/main/index.js";
 
 describe("main", () => {
   it("random number should be transmitted accordingly", () => {
