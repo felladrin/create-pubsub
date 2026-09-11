@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "types": ["node"]
-  }
+  },
+  // @rollup/plugin-terser resolves its ESM build at runtime but ships a single
+  // CJS-format declaration file, so under nodenext its default export
+  // typechecks as a namespace rather than a function. Rollup validates this
+  // file by executing it.
+  "exclude": ["rollup.config.ts"]
 }
