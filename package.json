@@ -22,7 +22,8 @@
     "./immer": {
       "types": "./immer/index.d.ts",
       "default": "./immer/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "engines": {
