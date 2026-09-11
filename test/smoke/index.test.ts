@@ -25,11 +25,17 @@ describe("smoke test - built output", () => {
     //
     // --ignore-scripts keeps `prepare` from rebuilding on top of the tree the
     // before hook just built, and keeps its output off the stdout being parsed.
-    const [packed] = JSON.parse(
+    // npm 11 returns an array of packed packages, npm 12 an object keyed by
+    // name. The publish workflow installs the latest npm, so both shapes reach
+    // this test depending on which workflow runs it.
+    const packOutput = JSON.parse(
       execSync("npm pack --dry-run --json --ignore-scripts", {
         encoding: "utf8",
       }),
     );
+    const [packed] = Array.isArray(packOutput)
+      ? packOutput
+      : Object.values(packOutput);
     const shipped = new Set(packed.files.map((file: { path: string }) => file.path));
 
     const { exports: exportsMap } = JSON.parse(
