@@ -25,3 +25,36 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run size-check
+
+  # The published package claims to work on the oldest Node versions with
+  # require(esm). Building needs a much newer Node than consuming does, so this
+  # builds on current Node and then loads the packed tarball on the floor.
+  floor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20.19.0', '22.12.0']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm pack --pack-destination "$RUNNER_TEMP"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Load the packed tarball
+        run: |
+          test "$(node -p process.versions.node)" = "${{ matrix.node-version }}"
+          mkdir -p "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          npm init -y
+          npm install --engine-strict --no-audit --no-fund \
+            "$RUNNER_TEMP"/create-pubsub-*.tgz react react-dom immer
+          cp "$GITHUB_WORKSPACE/test/floor/check.mjs" .
+          node check.mjs

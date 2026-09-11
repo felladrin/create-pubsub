@@ -25,6 +25,9 @@
     }
   },
   "sideEffects": false,
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "build": "del main react immer && rollup -c && npx tsc --emitDeclarationOnly --declaration --outDir .temp-types && mv .temp-types/src/main/index.d.ts main/ && mv .temp-types/src/react/index.d.ts react/ && mv .temp-types/src/immer/index.d.ts immer/ && rm -rf .temp-types",
     "test": "node --import tsx --import global-jsdom/register --test test/**/*.ts test/**/*.tsx",
