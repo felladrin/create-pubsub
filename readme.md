@@ -39,12 +39,12 @@ const { createPubSub } = require("create-pubsub");
 ```
 
 ```ts
-// Or import it from URL.
+// Or import it from a URL, with no install step. Works in Deno too.
 import { createPubSub } from "https://esm.sh/create-pubsub";
 ```
 
 ```html
-<!-- Or use it directly in the browser. -->
+<!-- In a plain HTML page, that same import needs a module script. -->
 <script type="module">
   import { createPubSub } from "https://esm.sh/create-pubsub";
 </script>
