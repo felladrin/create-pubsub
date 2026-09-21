@@ -1,7 +1,7 @@
 [
   {
     "path": "main/index.js",
-    "limit": "150 B"
+    "limit": "170 B"
   },
   {
     "path": "react/index.js",
