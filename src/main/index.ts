@@ -23,6 +23,12 @@ export function createPubSub<T = void>(
    */
   const head = [] as unknown as SubscriptionListNode<T>;
 
+  /**
+   * Reference to the last node on the list, so that subscribing appends in
+   * constant time instead of walking from the head to find the end.
+   */
+  let tail = head;
+
   return [
     (data: T) => {
       /**
@@ -57,31 +63,37 @@ export function createPubSub<T = void>(
     (handler) => {
       /**
        * Variable holding the reference of the current node.
-       * Always initialized with the node from the head of the list.
        * Will be set to 0 after subscription ends, to prevent unsubscribing more than once.
        */
-      let node: 0 | SubscriptionListNode<T> = head;
+      let node: 0 | SubscriptionListNode<T> = tail;
 
-      // Find and take control of the last node on the list.
-      while (node[2]) node = node[2];
-
-      // On the last node, link a new a node and take control of it.
-      node = node[2] = [handler, node];
+      // Append the new node after the current tail, then take control of it.
+      tail = node[2] = [handler, node];
+      node = tail;
 
       return () => {
         // If node has value 0, it means it was unsubscribed before, so we stop here.
         if (!node) return;
 
-        // Walk from head to find the current predecessor, because node[1]
-        // (captured at subscribe time) may point to a detached node.
-        let prev = head;
-        while (prev[2] && prev[2] !== node) prev = prev[2];
+        // Link the predecessor's next pointer around this node. This is O(1)
+        // because the back pointer below is repaired on every unlink, so it can
+        // never point to a node that has already left the list.
+        node[1][2] = node[2];
 
-        // Link the predecessor's next pointer around this node.
-        if (prev[2] === node) prev[2] = node[2];
+        if (node[2]) {
+          // Point the successor's back pointer at this node's predecessor, so
+          // every `previousNode` on the live list stays valid. Without this, a
+          // later unsubscribe of that successor would splice against this
+          // already-detached node instead of against the live list, and the
+          // successor would never be removed from it.
+          node[2][1] = node[1];
+        } else {
+          // This was the last node on the list, so the tail moves back one step.
+          tail = node[1];
+        }
 
-        // So this node is not on the list anymore, and we can remove the handler reference
-        // from it, and we also set its value to zero, to prevent unsubscribing more than once.
+        // So this node is not on the list anymore, and we also set its value to
+        // zero, to prevent unsubscribing more than once.
         node = 0;
       };
     },

@@ -2,6 +2,17 @@ import { describe, it } from "node:test";
 import { strict as assert } from "node:assert";
 import { createPubSub } from "../../src/main/index.js";
 
+/** Every possible ordering of the given values. */
+const permutations = (values: number[]): number[][] =>
+  values.length <= 1
+    ? [values]
+    : values.flatMap((value, index) =>
+        permutations([
+          ...values.slice(0, index),
+          ...values.slice(index + 1),
+        ]).map((rest) => [value, ...rest]),
+      );
+
 describe("main", () => {
   it("random number should be transmitted accordingly", () => {
     const randomNumber = Math.random();
@@ -364,5 +375,143 @@ describe("main", () => {
     const [, , get] = createPubSub();
 
     assert.equal(get(), undefined);
+  });
+
+  it("unsubscribing every listener in any order should leave nothing dispatching", () => {
+    for (let listenerCount = 1; listenerCount <= 6; listenerCount++) {
+      const indices = Array.from({ length: listenerCount }, (_, index) => index);
+
+      for (const order of permutations(indices)) {
+        const dispatched: string[] = [];
+
+        const [publish, subscribe] = createPubSub<number>();
+
+        const unsubscribes = indices.map((index) => {
+          const name = `listener${index}`;
+
+          return subscribe(() => dispatched.push(name));
+        });
+
+        for (const index of order) unsubscribes[index]();
+
+        publish(1);
+
+        assert.deepEqual(dispatched, [], `unsubscribing in order [${order}] left listeners dispatching`);
+      }
+    }
+  });
+
+  it("unsubscribing listeners in any order should keep the survivors dispatching in subscription order", () => {
+    for (let listenerCount = 2; listenerCount <= 6; listenerCount++) {
+      const indices = Array.from({ length: listenerCount }, (_, index) => index);
+
+      for (const order of permutations(indices)) {
+        const dispatched: string[] = [];
+
+        const [publish, subscribe] = createPubSub<number>();
+
+        const unsubscribes = indices.map((index) => {
+          const name = `listener${index}`;
+
+          return subscribe(() => dispatched.push(name));
+        });
+
+        const removed = order.slice(0, Math.floor(listenerCount / 2));
+
+        for (const index of removed) unsubscribes[index]();
+
+        publish(1);
+
+        assert.deepEqual(
+          dispatched,
+          indices.filter((index) => !removed.includes(index)).map((index) => `listener${index}`),
+          `unsubscribing in order [${order}] dispatched the wrong listeners`,
+        );
+
+        // A listener subscribed after all that churn must land at the tail of the
+        // remaining list and be reached by the next publish. This is what catches
+        // a tail reference left pointing at a node that has been unlinked.
+        dispatched.length = 0;
+
+        subscribe(() => dispatched.push("fresh"));
+
+        publish(2);
+
+        assert.deepEqual(
+          dispatched,
+          [...indices.filter((index) => !removed.includes(index)).map((index) => `listener${index}`), "fresh"],
+          `a listener subscribed after unsubscribing in order [${order}] was not reached`,
+        );
+      }
+    }
+  });
+
+  it("subscribing should stay within a constant-time ceiling as the list grows", () => {
+    const millisecondsToSubscribe = (listenerCount: number) => {
+      const [, subscribe] = createPubSub<number>();
+
+      const startedAt = process.hrtime.bigint();
+
+      for (let index = 0; index < listenerCount; index++) subscribe(() => {});
+
+      return Number(process.hrtime.bigint() - startedAt) / 1e6;
+    };
+
+    // Warm up the JIT before measuring.
+    millisecondsToSubscribe(500);
+
+    // Best of three: a one-off GC pause or scheduler hiccup must not fail a
+    // guard that sits on the release path. Under O(n) behaviour every run is
+    // slow, so the minimum still catches the regression.
+    const elapsed = Math.min(
+      millisecondsToSubscribe(20_000),
+      millisecondsToSubscribe(20_000),
+      millisecondsToSubscribe(20_000),
+    );
+
+    // Subscribing used to walk to the tail on every call, so building 20k
+    // listeners took 791-1268ms best-of-three. Appending at a tracked tail
+    // takes 0.5-1.0ms. The bound sits ~250x above the slowest observed run and
+    // ~3x below the fastest one under the old O(n) walk, so it catches a
+    // regression back to walking without being sensitive to CI noise.
+    assert.ok(
+      elapsed < 250,
+      `subscribing 20k listeners took ${elapsed.toFixed(0)}ms, which means subscribe walks the list instead of appending at the tail`,
+    );
+  });
+
+  it("unsubscribing in reverse subscription order should stay within a constant-time ceiling as the list grows", () => {
+    const millisecondsToUnsubscribe = (listenerCount: number) => {
+      const [, subscribe] = createPubSub<number>();
+
+      const unsubscribe = Array.from({ length: listenerCount }, () =>
+        subscribe(() => {}),
+      );
+
+      const startedAt = process.hrtime.bigint();
+
+      for (let index = unsubscribe.length - 1; index >= 0; index--)
+        unsubscribe[index]();
+
+      return Number(process.hrtime.bigint() - startedAt) / 1e6;
+    };
+
+    // Warm up the JIT before measuring.
+    millisecondsToUnsubscribe(500);
+
+    // Best of three, for the same reason as the subscribe guard above.
+    const elapsed = Math.min(
+      millisecondsToUnsubscribe(20_000),
+      millisecondsToUnsubscribe(20_000),
+      millisecondsToUnsubscribe(20_000),
+    );
+
+    // Unsubscribing used to walk from the head to find each predecessor, so
+    // tearing down 20k listeners took 791-1364ms best-of-three. Splicing
+    // through a repaired back pointer takes 0.2-0.5ms.
+    assert.ok(
+      elapsed < 250,
+      `unsubscribing 20k listeners took ${elapsed.toFixed(0)}ms, which means unsubscribe walks the list instead of splicing in constant time`,
+    );
   });
 });
