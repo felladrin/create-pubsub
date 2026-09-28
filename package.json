@@ -89,8 +89,8 @@
     "watchlist": "0.3.1"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "immer": ">=9"
+    "immer": ">=9",
+    "react": ">=18"
   },
   "peerDependenciesMeta": {
     "react": {

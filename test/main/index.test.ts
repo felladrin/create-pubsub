@@ -345,6 +345,33 @@ describe("main", () => {
     assert.deepEqual(order, ["second", "third", "fourth", "third", "fourth"]);
   });
 
+  it("a handler unsubscribed mid-publish should not be called later in that same publish", () => {
+    const calls: string[] = [];
+
+    const [publish, subscribe] = createPubSub<number>(0);
+
+    // The first handler removes itself and the one after it. The dispatch
+    // cursor is left on a node that has left the list, so the walk has to
+    // notice that the node it reaches next was unsubscribed in the meantime.
+    const unsubscribeFirst = subscribe(() => {
+      calls.push("first");
+      unsubscribeFirst();
+      unsubscribeSecond();
+    });
+
+    const unsubscribeSecond = subscribe(() => {
+      calls.push("second");
+    });
+
+    subscribe(() => {
+      calls.push("third");
+    });
+
+    publish(1);
+
+    assert.deepEqual(calls, ["first", "third"]);
+  });
+
   it("subscribing mid-publish should reach the new subscriber in the current publish loop", () => {
     const order: number[] = [];
 
