@@ -52,8 +52,12 @@ export function createPubSub<T = void>(
         // Take control of the next node.
         node = node[2];
 
-        // Publish the data received to the node.
-        node[0](data, previousData);
+        // Publish the data received to the node, unless the node was
+        // unsubscribed after the cursor passed its predecessor. Unsubscribing
+        // clears the handler, and that is the only way to tell: the cursor can
+        // be sitting on a node that has already left the list, and a detached
+        // node still points at the successor it had when it left.
+        if (node[0]) node[0](data, previousData);
 
         // If a reaction from that node ended up publishing a new data,
         // which happened in another loop, we can break this one.
@@ -92,6 +96,11 @@ export function createPubSub<T = void>(
           tail = node[1];
         }
 
+        // Clear the handler, so a publish already walking the list does not
+        // call it, and so a node detached in front of a long-lived subscriber
+        // stops holding its handler alive.
+        node[0] = 0;
+
         // So this node is not on the list anymore, and we also set its value to
         // zero, to prevent unsubscribing more than once.
         node = 0;
@@ -121,7 +130,7 @@ export type SubscribeFunction<T> = (
 
 //#region Private Types
 type SubscriptionListNode<T> = [
-  handler: SubscriptionHandler<T>,
+  handler: SubscriptionHandler<T> | 0,
   previousNode: SubscriptionListNode<T>,
   nextNode?: SubscriptionListNode<T>
 ];
