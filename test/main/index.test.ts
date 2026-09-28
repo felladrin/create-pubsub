@@ -397,6 +397,20 @@ describe("main", () => {
         publish(1);
 
         assert.deepEqual(dispatched, [], `unsubscribing in order [${order}] left listeners dispatching`);
+
+        // The list is empty now, so the tail must have rolled all the way back
+        // to the head. A listener subscribed here has to be reached by the next
+        // publish; if the tail were left on an unlinked node, it never would be.
+        // The second array is not a style choice: `assert.deepEqual` asserts the
+        // type of its first argument, so the assertion above narrows
+        // `dispatched` to `never[]` and pushing into it no longer compiles.
+        const afterDraining: string[] = [];
+
+        subscribe(() => afterDraining.push("fresh"));
+
+        publish(2);
+
+        assert.deepEqual(afterDraining, ["fresh"], `a listener subscribed after unsubscribing every listener in order [${order}] was not reached`);
       }
     }
   });
@@ -470,17 +484,19 @@ describe("main", () => {
     );
 
     // Subscribing used to walk to the tail on every call, so building 20k
-    // listeners took 791-1268ms best-of-three. Appending at a tracked tail
-    // takes 0.5-1.0ms. The bound sits ~250x above the slowest observed run and
-    // ~3x below the fastest one under the old O(n) walk, so it catches a
-    // regression back to walking without being sensitive to CI noise.
+    // listeners took over a second. Appending at a tracked tail takes about a
+    // millisecond. Both figures move with the machine, so the bound is not
+    // derived from either one: it sits two orders of magnitude above the
+    // constant-time path and several times below the walk. That is wide enough
+    // to survive a loaded CI runner and still far too tight for a regression
+    // back to walking to pass.
     assert.ok(
       elapsed < 250,
       `subscribing 20k listeners took ${elapsed.toFixed(0)}ms, which means subscribe walks the list instead of appending at the tail`,
     );
   });
 
-  it("unsubscribing in reverse subscription order should stay within a constant-time ceiling as the list grows", () => {
+  it("unsubscribing in reverse subscription order should stay within a constant-time ceiling on a large list", () => {
     const millisecondsToUnsubscribe = (listenerCount: number) => {
       const [, subscribe] = createPubSub<number>();
 
@@ -507,8 +523,9 @@ describe("main", () => {
     );
 
     // Unsubscribing used to walk from the head to find each predecessor, so
-    // tearing down 20k listeners took 791-1364ms best-of-three. Splicing
-    // through a repaired back pointer takes 0.2-0.5ms.
+    // tearing down 20k listeners took over a second. Splicing through a
+    // repaired back pointer takes well under a millisecond. The bound is chosen
+    // the same way as the subscribe guard above.
     assert.ok(
       elapsed < 250,
       `unsubscribing 20k listeners took ${elapsed.toFixed(0)}ms, which means unsubscribe walks the list instead of splicing in constant time`,
