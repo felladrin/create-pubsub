@@ -1,6 +1,6 @@
 {
   "name": "create-pubsub",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A tiny Event Emitter and Observable Store.",
   "type": "module",
   "files": [
