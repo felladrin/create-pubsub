@@ -55,18 +55,28 @@ export function createPubSub<T = void>(
        */
       let rejoined = false;
 
-      // While there is a next node, or the cursor is a node that left the
-      // list while it was the last one (its handler slot cleared by
-      // unsubscribe): step back to the predecessor, whose next pointer now
-      // leads into the listeners appended to the tail during this publish.
-      while (
-        node[2] ||
-        (node[0] === 0 &&
-          !rejoined &&
-          ((rejoined = true), (node = node[1]), node[2]))
-      ) {
+      for (;;) {
+        /**
+         * Variable holding the node the walk moves to next.
+         */
+        let next = node[2];
+
+        // The cursor left the list while it was the last node, so unsubscribe
+        // cleared its handler slot and the tail moved back to its predecessor.
+        // That predecessor's next pointer now leads into the listeners appended
+        // during this publish, and it can only lead there: nothing already
+        // dispatched can be appended after the walk stalled. The slot is
+        // compared against 0 because the head holds no handler at all.
+        if (!next && node[0] === 0 && !rejoined) {
+          rejoined = true;
+          next = node[1][2];
+        }
+
+        // Nothing left to walk to.
+        if (!next) break;
+
         // Take control of the next node.
-        node = node[2];
+        node = next;
 
         // Publish the data received to the node, unless the node was
         // unsubscribed after the cursor passed its predecessor. Unsubscribing
