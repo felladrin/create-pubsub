@@ -398,6 +398,59 @@ describe("main", () => {
     assert.deepEqual(order, [1, 2, 4, 3]);
   });
 
+  it("a listener subscribed after the publish cursor detached at the tail should be reached in the same publish", () => {
+    const calls: string[] = [];
+
+    const [publish, subscribe] = createPubSub<number>();
+
+    let unsubscribeFirst: () => void;
+
+    unsubscribeFirst = subscribe(() => {
+      calls.push("first");
+      // The cursor's own node is the last one at this moment, so removing it
+      // detaches the cursor from the list. The walk has to notice the live
+      // list moved on and rejoin, so the listener subscribed right after is
+      // dispatched by this same publish.
+      unsubscribeFirst();
+      subscribe(() => calls.push("new"));
+    });
+
+    publish(1);
+
+    assert.deepEqual(calls, ["first", "new"]);
+
+    publish(2);
+
+    assert.deepEqual(calls, ["first", "new", "new"]);
+  });
+
+  it("a handler that unsubscribes itself and resubscribes on every publish should not loop forever", () => {
+    const [publish, subscribe] = createPubSub<number>();
+
+    let calls = 0;
+
+    const subscribeOnce = () => {
+      const unsubscribe = subscribe(() => {
+        calls++;
+        unsubscribe();
+        subscribeOnce();
+      });
+    };
+
+    subscribeOnce();
+
+    publish(1);
+
+    // The walk rejoins the live list once, so the replacement listener is
+    // reached in the same publish. The second tail-detach stops the walk:
+    // rejoining again would extend it forever.
+    assert.equal(calls, 2);
+
+    publish(2);
+
+    assert.equal(calls, 4);
+  });
+
   it("get() before anything is published returns undefined when no initial value is set", () => {
     const [, , get] = createPubSub();
 
